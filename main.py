@@ -2,22 +2,15 @@ import os
 import json
 import re
 import time
-
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-from google import genai
-from google.genai import types
+from pydantic import BaseModel
+import google.generativeai as genai
+from sqlalchemy import create_engine, Column, Integer, String, Float, BigInteger
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, Session
 
-load_dotenv()
-
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if not GEMINI_API_KEY:
-    raise RuntimeError("GEMINI_API_KEY topilmadi. Iltimos, .env faylini tekshiring.")
-
-client = genai.Client(api_key=GEMINI_API_KEY)
-
-app = FastAPI(title="CalorieScan V2")
+app = FastAPI(title="CalorieScan Backend V2")
 
 app.add_middleware(
     CORSMiddleware,
@@ -27,68 +20,65 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# ==========================================
+# 1. DATABASE (POSTGRESQL) SOZLAMALARI
+# ==========================================
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./test.db")
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+engine = create_engine(DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+class DBUser(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    telegram_id = Column(BigInteger, unique=True, index=True)
+    gender = Column(String)
+    age = Column(Integer)
+    height = Column(Integer)
+    weight = Column(Float)
+    activity_level = Column(Float)
+    goal = Column(String)
+    tdee = Column(Integer)
+
+Base.metadata.create_all(bind=engine)
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+class UserProfile(BaseModel):
+    telegram_id: int
+    gender: str
+    age: int
+    height: int
+    weight: float
+    activity_level: float
+    goal: str
+    tdee: int
+
+# ==========================================
+# 2. GEMINI AI SOZLAMALARI (RETRY BILAN)
+# ==========================================
+# API Kalitingiz avtomatik qo'yildi
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDE7gAvw0m-NRaolJU0iir0cigYVT3ZIQU")
+genai.configure(api_key=GEMINI_API_KEY)
+
 PROMPT = (
     "Siz dunyodagi eng tajribali ovqatlanish va diyetologiya ekspertisiz. "
     "Quyidagi rasmda ko'rsatilgan taomni chuqur tahlil qiling. "
-    "Faqat va faqat quyidagi JSON formatida javob bering, boshqa hech qanday izoh yoki matn yozmang:\n"
-    '{"food_name": "taom nomi (faqat o\'zbek tilida)", "calories": 000, "protein": 00, "fat": 00, "carbs": 00}'
+    "1. USDA ma'lumotlar bazasiga asoslanib, kaloriya va makrolarni hisoblang. "
+    "Faqat va faqat quyidagi qat'iy JSON formatida javob bering, hech qanday qo'shimcha so'z yozmang:\n"
+    '{"food_name": "Taom nomi (O\'zbek tilida)", "calories": 0, "protein": 0, "fat": 0, "carbs": 0}'
 )
 
 MAX_RETRIES = 3
-RETRY_DELAY = 2  # seconds
-
+RETRY_DELAY = 2
 
 def extract_json(text: str) -> dict:
-    cleaned = re.sub(r"```(?:json)?\s*", "", text).replace("```", "").strip()
-    return json.loads(cleaned)
-
-
-def call_gemini_with_retry(image_bytes: bytes, content_type: str) -> str:
-    last_error = None
-    for attempt in range(1, MAX_RETRIES + 1):
-        try:
-            response = client.models.generate_content(
-                model="gemini-2.5-flash",
-                contents=[
-                    types.Part.from_bytes(data=image_bytes, mime_type=content_type),
-                    PROMPT,
-                ],
-            )
-            return response.text
-        except Exception as e:
-            last_error = e
-            if attempt < MAX_RETRIES:
-                time.sleep(RETRY_DELAY)
-    raise last_error
-
-
-@app.post("/analyze-food")
-async def analyze_food(file: UploadFile = File(...)):
-    if not file:
-        raise HTTPException(status_code=400, detail="Rasm fayli yuklanmadi.")
-
-    content_type = file.content_type or "image/jpeg"
-    if not content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="Faqat rasm fayllari qabul qilinadi.")
-
-    image_bytes = await file.read()
-    if not image_bytes:
-        raise HTTPException(status_code=400, detail="Rasm fayli bo'sh.")
-
-    try:
-        raw_text = call_gemini_with_retry(image_bytes, content_type)
-    except Exception:
-        raise HTTPException(
-            status_code=503,
-            detail="Tizimda vaqtinchalik tirbandlik. Iltimos, birozdan so'ng yana urinib ko'ring 🔄",
-        )
-
-    try:
-        result = extract_json(raw_text)
-    except json.JSONDecodeError:
-        raise HTTPException(
-            status_code=422,
-            detail="Natijani o'qishda xatolik yuz berdi. Iltimos, boshqa rasm bilan urinib ko'ring.",
-        )
-
-    return result
+    cleaned = re.sub(r"
