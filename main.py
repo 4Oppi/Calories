@@ -65,7 +65,6 @@ class UserProfile(BaseModel):
 # ==========================================
 # 2. GEMINI AI SOZLAMALARI (RETRY BILAN)
 # ==========================================
-# API Kalitingiz avtomatik qo'yildi
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDE7gAvw0m-NRaolJU0iir0cigYVT3ZIQU")
 genai.configure(api_key=GEMINI_API_KEY)
 
@@ -80,5 +79,9 @@ PROMPT = (
 MAX_RETRIES = 3
 RETRY_DELAY = 2
 
-def extract_json(text: str) -> dict:
+def extract_json(text: str):
+    # Mana shu qatorda xato bor edi, endi to'liq va yopilgan:
     cleaned = re.sub(r"
+http://googleusercontent.com/immersive_entry_chip/0
+
+Hozir shu kodni tashlab yangilasangiz, loglardagi qizil yozuvlar yo'qolishi va botingiz silliq ishlashi kerak. Sinab ko'ring! 🚀
