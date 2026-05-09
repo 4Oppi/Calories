@@ -1,6 +1,5 @@
 import os
 import json
-import re
 import time
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -80,13 +79,63 @@ MAX_RETRIES = 3
 RETRY_DELAY = 2
 
 def extract_json(text: str):
-    # Bu yerda xato tuzatildi: string to'liq yopildi
-    cleaned = re.sub(r"
-http://googleusercontent.com/immersive_entry_chip/0
+    # MUHIM: Kod qirqilib qolmasligi uchun "uchta qo'shtirnoq" ni formula bilan yasadik:
+    ticks = "`" * 3
+    cleaned = text.replace(ticks + "json", "").replace(ticks, "").strip()
+    return json.loads(cleaned)
 
-**Nima qilish kerak:**
-1.  Ushbu kodni nusxalashda oxirigacha tushganiga e'tibor bering.
-2.  `main.py` faylingizni to'liq yangilang.
-3.  GitHub'ga yuklab, Railway'da "Deployment Successful" yozuvi chiqishini kuting.
+def call_gemini_with_retry(image_bytes: bytes, content_type: str):
+    last_error = None
+    for attempt in range(1, MAX_RETRIES + 1):
+        try:
+            model = genai.GenerativeModel('gemini-1.5-flash')
+            image_parts = [{"mime_type": content_type, "data": image_bytes}]
+            response = model.generate_content([PROMPT, image_parts[0]])
+            return response.text
+        except Exception as e:
+            last_error = e
+            if attempt < MAX_RETRIES:
+                time.sleep(RETRY_DELAY)
+    raise last_error
 
-Shu qadamdan keyin "Failed to fetch" xatosi yo'qolishi kerak.
+# ==========================================
+# 3. API ENDPOINTLAR
+# ==========================================
+
+@app.post("/save-profile")
+def save_profile(profile: UserProfile, db: Session = Depends(get_db)):
+    user = db.query(DBUser).filter(DBUser.telegram_id == profile.telegram_id).first()
+    if user:
+        user.gender = profile.gender
+        user.age = profile.age
+        user.height = profile.height
+        user.weight = profile.weight
+        user.activity_level = profile.activity_level
+        user.goal = profile.goal
+        user.tdee = profile.tdee
+        message = "Profil yangilandi"
+    else:
+        new_user = DBUser(**profile.dict())
+        db.add(new_user)
+        message = "Yangi profil yaratildi"
+    db.commit()
+    return {"status": "success", "message": message}
+
+@app.post("/analyze-food")
+async def analyze_food(file: UploadFile = File(...)):
+    if not file:
+        raise HTTPException(status_code=400, detail="Rasm fayli yuklanmadi.")
+    
+    content_type = file.content_type or "image/jpeg"
+    image_bytes = await file.read()
+
+    try:
+        raw_text = call_gemini_with_retry(image_bytes, content_type)
+        result = extract_json(raw_text)
+        return result
+    except Exception as e:
+        print(f"Xatolik yuz berdi: {e}")
+        raise HTTPException(
+            status_code=503,
+            detail="Tizimda vaqtinchalik tirbandlik. Iltimos, birozdan so'ng yana urinib ko'ring 🔄"
+        )
