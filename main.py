@@ -1,14 +1,16 @@
 import os
 import json
-import re
 import time
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import google.generativeai as genai
 from sqlalchemy import create_engine, Column, Integer, String, Float, BigInteger
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
+
+# SIZNING ORIGINAL KUTUBXONANGIZ (YANGI VERSIYA)
+from google import genai
+from google.genai import types
 
 app = FastAPI(title="CalorieScan Backend V2")
 
@@ -63,10 +65,10 @@ class UserProfile(BaseModel):
     tdee: int
 
 # ==========================================
-# 2. GEMINI AI SOZLAMALARI (RETRY BILAN)
+# 2. GEMINI AI SOZLAMALARI (2.5-FLASH BILAN)
 # ==========================================
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDE7gAvw0m-NRaolJU0iir0cigYVT3ZIQU")
-genai.configure(api_key=GEMINI_API_KEY)
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 PROMPT = (
     "Siz dunyodagi eng tajribali ovqatlanish va diyetologiya ekspertisiz. "
@@ -88,9 +90,14 @@ def call_gemini_with_retry(image_bytes: bytes, content_type: str):
     last_error = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
-            model = genai.GenerativeModel('gemini-1.5-flash')
-            image_parts = [{"mime_type": content_type, "data": image_bytes}]
-            response = model.generate_content([PROMPT, image_parts[0]])
+            # SIZ YOZGAN ORIGINAL GEMINI 2.5 FLASH MODELI
+            response = client.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=[
+                    types.Part.from_bytes(data=image_bytes, mime_type=content_type),
+                    PROMPT
+                ]
+            )
             return response.text
         except Exception as e:
             last_error = e
