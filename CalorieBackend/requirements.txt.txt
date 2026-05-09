@@ -1,7 +1,0 @@
-fastapi
-uvicorn
-python-multipart
-google-generativeai
-pydantic
-sqlalchemy
-psycopg2-binary
