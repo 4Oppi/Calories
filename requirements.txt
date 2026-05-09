@@ -4,4 +4,4 @@ python-multipart
 pydantic
 sqlalchemy
 psycopg2-binary
-google-generativeai
+google-genai
