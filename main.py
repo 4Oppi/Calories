@@ -1,5 +1,6 @@
 import os
 import json
+import re
 import time
 from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -79,7 +80,6 @@ MAX_RETRIES = 3
 RETRY_DELAY = 2
 
 def extract_json(text: str):
-    # MUHIM: Kod qirqilib qolmasligi uchun "uchta qo'shtirnoq" ni formula bilan yasadik:
     ticks = "`" * 3
     cleaned = text.replace(ticks + "json", "").replace(ticks, "").strip()
     return json.loads(cleaned)
