@@ -1,7 +1,7 @@
 fastapi
 uvicorn
 python-multipart
-google-generativeai>=0.5.2
+google-generativeai
 pydantic
-SQLAlchemy
+sqlalchemy
 psycopg2-binary
