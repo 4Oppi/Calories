@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="light dark" />
+  <title>CalorieScan V2</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class', // Qorong'i rejimni yoqamiz
+      theme: {
+        extend: {
+          colors: { mint: { 50:'#f0fdf8',100:'#ccfbef',200:'#99f6e0',300:'#5eead4',400:'#2dd4bf',500:'#10b981',600:'#059669',700:'#047857' } },
+          fontFamily: { poppins: ['Poppins','sans-serif'] },
+          borderRadius: { '2xl':'16px','3xl':'24px' },
+          boxShadow: { soft: '0 4px 20px rgba(0,0,0,0.05)', card: '0 8px 32px rgba(16,185,129,0.10)', glow: '0 0 32px rgba(16,185,129,0.18)' }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    *{font-family:'Poppins',sans-serif;}
+    body{transition: background-color 0.3s, color 0.3s;}
+    
+    /* Dark Mode Global Overrides */
+    .dark body { background: #111827 !important; color: #f9fafb !important; }
+    .dark header { background: rgba(17, 24, 39, 0.9) !important; border-bottom-color: #374151 !important; }
+    .dark .bottom-nav { background: rgba(17, 24, 39, 0.95) !important; border-top-color: #374151 !important; }
+    
+    .dark .stat-card, .dark .settings-section, .dark .scan-area, .dark #resultCard, .dark #loadingState { 
+      background: #1f2937 !important; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
+    .dark .scan-area { border-color: #374151 !important; }
+    
+    .dark .field-input { background: #374151 !important; border-color: #4b5563; color: #f9fafb !important; }
+    .dark .field-input:focus { border-color: #10b981; background: #4b5563 !important; }
+    
+    .dark .lang-btn { background: #374151; border-color: #4b5563; color: #d1d5db; }
+    .dark .lang-btn.active { background: #10b981; border-color: #10b981; color: #fff; }
+    
+    .dark .bg-gray-100 { background-color: #374151 !important; }
+    .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.15) !important; }
+    .dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; }
+    .dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.15) !important; }
+    .dark .border-mint-50 { border-color: rgba(16, 185, 129, 0.2) !important; }
+    
+    /* Animations & Others */
+    .spinner{animation:spin .9s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg);}}
+    .pulse-ring::after{content:'';position:absolute;inset:-6px;border-radius:9999px;border:2px solid #10b981;animation:pulse-ring 2s ease-out infinite;}
+    @keyframes pulse-ring{0%{opacity:.6;transform:scale(1);}100%{opacity:0;transform:scale(1.12);}}
+    @keyframes slideUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
+    .slide-up{animation:slideUp .45s cubic-bezier(.22,1,.36,1) both;}
+    @keyframes toastIn{from{opacity:0;transform:translate(-50%,16px);}to{opacity:1;transform:translate(-50%,0);}}
+    .progress-fill{transition:width .8s cubic-bezier(.22,1,.36,1);}
+    .scan-area{transition:box-shadow .2s,transform .2s;display:flex;-webkit-tap-highlight-color:transparent;}
+    .scan-area:hover{box-shadow:0 0 32px rgba(16,185,129,.18);transform:scale(1.01);}
+    .scan-area:active{transform:scale(.98);}
+    .count-num{font-variant-numeric:tabular-nums;}
+    .gender-btn{transition:all .2s;border-radius:12px;padding:10px 0;font-size:14px;font-weight:600;color:#6b7280;}
+    .dark .gender-btn { color: #9ca3af; }
+    .gender-btn.active{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 4px 12px rgba(16,185,129,.25);}
+    .field-input{width:100%;border:1.5px solid #e5e7eb;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:500;outline:none;transition:border-color .2s;}
+    select.field-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2.5' stroke-linecap='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;}
+    
+    #errorToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
+    #successToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
+    .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;backdrop-filter:blur(12px);border-top:1px solid #f0fdf4;padding-bottom:env(safe-area-inset-bottom,0px);}
+    .nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0 6px;flex:1;color:#9ca3af;font-size:10px;font-weight:600;transition:color .2s;cursor:pointer;border:none;background:none;}
+    .nav-btn.active{color:#10b981;}
+    .nav-btn svg{transition:transform .2s;}
+    .nav-btn.active svg{transform:scale(1.1);}
+    .nav-fab{width:52px;height:52px;border-radius:9999px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,box-shadow .15s;margin-top:-10px;position:relative;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+    .nav-fab:active{transform:scale(.93);box-shadow:0 2px 8px rgba(16,185,129,.3);}
+    .tab-panel{display:none;}
+    .tab-panel.active{display:block;animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;}
+    .lang-btn{padding:6px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1.5px solid #e5e7eb;background:#fff;color:#6b7280;cursor:pointer;transition:all .2s;}
+    .lang-btn.active{background:#10b981;border-color:#10b981;color:#fff;}
+    .settings-section{border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+    .settings-section-title{font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
+    
+    .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
+    .ring-wrap svg{transform:rotate(-90deg);}
+    .ring-track{fill:none;stroke-linecap:round;}
+    .dark .ring-track { stroke: #374151 !important; }
+    .ring-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset 1s cubic-bezier(.22,1,.36,1);}
+    .ring-label{position:absolute;display:flex;flex-direction:column;align-items:center;justify-content:center;top:0;left:0;right:0;bottom:0;}
+    .bmi-bar{height:10px;border-radius:999px;background:linear-gradient(to right,#60a5fa 0%,#34d399 25%,#fbbf24 60%,#f87171 100%);}
+    .bmi-needle{position:absolute;top:-4px;width:4px;height:18px;background:#1f2937;border-radius:2px;transform:translateX(-50%);transition:left 1s cubic-bezier(.22,1,.36,1);}
+    .dark .bmi-needle { background: #f9fafb; }
+    .stat-card{border-radius:20px;padding:16px 18px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
+
+
+  </style>
+</head>
+<body class="min-h-screen bg-[#F9FAFB] text-gray-800" style="padding-bottom:80px">
+
+<header class="sticky top-0 z-30 backdrop-blur-md border-b border-gray-100 bg-white/90">
+  <div class="max-w-md mx-auto px-5 h-14 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center shadow-card">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a10 10 0 0 1 10 10 10 10 0 0 1-10 10A10 10 0 0 1 2 12 10 10 0 0 1 12 2z"/><path d="M8 12h8M12 8v8"/>
+        </svg>
+      </div>
+      <span class="text-[15px] tracking-tight font-700 text-gray-800 dark:text-white">CalorieScan</span>
+    </div>
+    <div class="relative w-8 h-8 flex items-center justify-center">
+      <span id="profileDot" class="hidden w-2.5 h-2.5 bg-mint-500 border-2 border-white rounded-full"></span>
+    </div>
+  </div>
+</header>
+
+<div id="tab-home" class="tab-panel active max-w-md mx-auto px-5 pt-5 pb-6 space-y-5">
+  <div class="rounded-3xl shadow-soft p-5 slide-up bg-white dark:bg-gray-800">
+    <div class="flex items-center justify-between mb-1">
+      <span id="txtDailyGoal" class="text-xs font-600 text-gray-400 uppercase tracking-widest">Bugungi maqsad</span>
+      <span class="text-xs font-600 text-mint-500" id="goalPercent">0%</span>
+    </div>
+    <div class="flex items-end justify-between mt-2 mb-4">
+      <div>
+        <span class="text-3xl text-gray-800 dark:text-white count-num" style="font-weight:800" id="todayKcal">0</span>
+        <span class="text-sm text-gray-400 ml-1">/ <span id="goalLabel">2000</span> kcal</span>
+      </div>
+      <div class="text-right">
+        <p id="txtRemain" class="text-xs text-gray-400">Qoldi</p>
+        <p class="text-sm font-700 text-mint-500 count-num" id="remainKcal">2000</p>
+      </div>
+    </div>
+    <div class="h-3 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div id="progressBar" class="progress-fill h-full bg-gradient-to-r from-mint-400 to-mint-600 rounded-full" style="width:0%"></div>
+    </div>
+    <div class="flex justify-around mt-5 pt-2">
+      <div class="flex flex-col items-center gap-1.5">
+        <div class="ring-wrap w-[72px] h-[72px]">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle class="ring-track" cx="36" cy="36" r="30" stroke="#dbeafe" stroke-width="7"/>
+            <circle id="ringProtein" class="ring-fill" cx="36" cy="36" r="30" stroke="#3b82f6" stroke-width="7" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="ring-label"><span id="macroProteinVal" class="text-[11px] text-blue-500 count-num" style="font-weight:800;line-height:1">0g</span></div>
+        </div>
+        <p id="txtProteinLbl" class="text-[10px] text-gray-400 font-600 uppercase tracking-wide">Oqsil</p>
+      </div>
+      <div class="flex flex-col items-center gap-1.5">
+        <div class="ring-wrap w-[72px] h-[72px]">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle class="ring-track" cx="36" cy="36" r="30" stroke="#fef3c7" stroke-width="7"/>
+            <circle id="ringFat" class="ring-fill" cx="36" cy="36" r="30" stroke="#f59e0b" stroke-width="7" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="ring-label"><span id="macroFatVal" class="text-[11px] text-amber-500 count-num" style="font-weight:800;line-height:1">0g</span></div>
+        </div>
+        <p id="txtFatLbl" class="text-[10px] text-gray-400 font-600 uppercase tracking-wide">Yog'</p>
+      </div>
+      <div class="flex flex-col items-center gap-1.5">
+        <div class="ring-wrap w-[72px] h-[72px]">
+          <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle class="ring-track" cx="36" cy="36" r="30" stroke="#ede9fe" stroke-width="7"/>
+            <circle id="ringCarbs" class="ring-fill" cx="36" cy="36" r="30" stroke="#8b5cf6" stroke-width="7" stroke-dasharray="188.5" stroke-dashoffset="188.5"/>
+          </svg>
+          <div class="ring-label"><span id="macroCarbsVal" class="text-[11px] text-violet-500 count-num" style="font-weight:800;line-height:1">0g</span></div>
+        </div>
+        <p id="txtCarbsLbl" class="text-[10px] text-gray-400 font-600 uppercase tracking-wide">Uglevod</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="relative flex justify-center">
+    <!-- Ikkala yashirin input — iOS uchun alohida ajratilgan -->
+    <input type="file" id="fileInputCamera"  accept="image/*"            capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
+    <input type="file" id="fileInputGallery" accept="image/jpeg,image/png"                    style="visibility:hidden;width:0;height:0;position:absolute;" />
+
+    <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-10 bg-white">
+      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center shadow-glow">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+        </svg>
+      </div>
+      <div class="text-center">
+        <p id="txtScanTitle" class="text-base font-700 text-gray-800 dark:text-white">Taomni yuklang</p>
+        <p id="txtScanSub" class="text-xs text-gray-400 mt-0.5">Kamera yoki Galereyadan tanlang</p>
+      </div>
+      <!-- Ikki alohida tugma -->
+      <div class="flex gap-3 w-full px-4">
+        <label for="fileInputCamera" class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3 font-600 text-sm cursor-pointer shadow-card active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          <span id="txtCameraBtn">Kamera</span>
+        </label>
+        <label for="fileInputGallery" class="flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 rounded-2xl py-3 font-600 text-sm cursor-pointer active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span id="txtGalleryBtn">Galereya</span>
+        </label>
+      </div>
+    </div>
+    <div id="loadingState" class="hidden w-full rounded-3xl shadow-soft border-2 border-mint-100 flex flex-col items-center justify-center gap-3 py-12 bg-white">
+      <div class="relative w-16 h-16">
+        <svg class="spinner w-16 h-16 text-mint-500" viewBox="0 0 50 50" fill="none">
+          <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="60"/>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center"><div class="w-5 h-5 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div></div>
+      </div>
+      <p id="txtAnalyzing" class="text-sm font-600 text-gray-600 dark:text-gray-300">Taom tahlil qilinmoqda…</p>
+      <p id="txtWait" class="text-xs text-gray-400">Bir lahza kuting</p>
+    </div>
+  </div>
+
+  <div id="resultCard" class="hidden rounded-3xl shadow-soft overflow-hidden slide-up bg-white">
+    <div class="bg-gradient-to-r from-mint-500 to-mint-600 px-6 pt-6 pb-8">
+      <p id="txtResultLabel" class="text-mint-100 text-xs font-600 uppercase tracking-widest mb-1">Tahlil natijasi</p>
+      <p id="foodName" class="text-white text-2xl leading-tight" style="font-weight:800">—</p>
+    </div>
+    <div class="flex justify-center -mt-6 mb-2">
+      <div class="rounded-2xl shadow-card px-8 py-3 flex items-baseline gap-1.5 border border-mint-50 bg-white dark:bg-gray-800">
+        <span id="calorieNum" class="text-4xl text-mint-500 count-num" style="font-weight:800">0</span>
+        <span class="text-sm font-600 text-gray-400">kcal</span>
+      </div>
+    </div>
+    <div class="px-5 pb-4 grid grid-cols-3 gap-3 mt-2">
+      <div class="bg-blue-50 rounded-2xl p-3 text-center">
+        <p id="txtResProtein" class="text-[10px] font-600 text-blue-400 uppercase tracking-wide mb-1">Oqsil</p>
+        <p id="proteinNum" class="text-lg text-blue-500 count-num" style="font-weight:800">0g</p>
+      </div>
+      <div class="bg-amber-50 rounded-2xl p-3 text-center">
+        <p id="txtResFat" class="text-[10px] font-600 text-amber-400 uppercase tracking-wide mb-1">Yog'</p>
+        <p id="fatNum" class="text-lg text-amber-500 count-num" style="font-weight:800">0g</p>
+      </div>
+      <div class="bg-violet-50 rounded-2xl p-3 text-center">
+        <p id="txtResCarbs" class="text-[10px] font-600 text-violet-400 uppercase tracking-wide mb-1">Uglevod</p>
+        <p id="carbsNum" class="text-lg text-violet-500 count-num" style="font-weight:800">0g</p>
+      </div>
+    </div>
+    <div class="px-5 pb-6">
+      <button id="addLogBtn" class="w-full bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3.5 font-700 text-sm shadow-card hover:opacity-90 active:scale-95 transition-all">✓ Kunlik hisobga qo'shish</button>
+      <button id="rescanBtn" class="w-full mt-2.5 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 rounded-2xl py-3 font-600 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 active:scale-95 transition-all">Qayta skanerlash</button>
+    </div>
+  </div>
+</div>
+
+<div id="tab-analytics" class="tab-panel max-w-md mx-auto px-5 pt-5 pb-6 space-y-4">
+  <div class="grid grid-cols-2 gap-3">
+    <div class="stat-card bg-white">
+      <p id="txtCurrWeight" class="text-[10px] font-700 text-gray-400 uppercase tracking-widest mb-1">Joriy vazn</p>
+      <div class="flex items-baseline gap-1">
+        <span id="analyticsWeight" class="text-2xl text-gray-800 dark:text-white" style="font-weight:800">—</span><span class="text-sm text-gray-400 font-500">kg</span>
+      </div>
+      <p id="txtFromProfile" class="text-[10px] text-gray-300 mt-1">Profildan</p>
+    </div>
+    <div class="stat-card" style="background:linear-gradient(135deg,#f0fdf8,#ccfbef) !important;border:1.5px solid #99f6e0;">
+      <p id="txtTargetWeight" class="text-[10px] font-700 text-mint-600 uppercase tracking-widest mb-1">Maqsadli vazn</p>
+      <div class="flex items-baseline gap-1">
+        <span id="analyticsTargetWeight" class="text-2xl text-mint-600" style="font-weight:800">—</span><span class="text-sm text-mint-400 font-500">kg</span>
+      </div>
+      <p id="analyticsGoalLabel" class="text-[10px] text-mint-400 mt-1">—</p>
+    </div>
+  </div>
+
+  <div class="stat-card bg-white">
+    <div class="flex items-center justify-between mb-3">
+      <p id="txtBMILabel" class="text-[11px] font-700 text-gray-400 uppercase tracking-widest">BMI</p>
+      <div class="flex items-center gap-1.5">
+        <span id="bmiValue" class="text-xl text-gray-800 dark:text-white" style="font-weight:800">—</span>
+        <span id="bmiCategory" class="text-[11px] font-700 px-2 py-0.5 rounded-full bg-mint-50 text-mint-600">—</span>
+      </div>
+    </div>
+    <div class="relative mt-2 mb-5">
+      <div class="bmi-bar w-full"></div>
+      <div id="bmiNeedle" class="bmi-needle" style="left:0%"></div>
+    </div>
+    <div class="flex justify-between text-[9px] font-600 text-gray-400 -mt-3">
+      <span id="txtUnderweight">Yetishmovchi</span><span id="txtHealthy">Normal</span><span id="txtOverweight">Ortiqcha</span><span id="txtObese">Semiz</span>
+    </div>
+  </div>
+
+  <div class="stat-card bg-white">
+    <p id="txtWeightChart" class="text-[11px] font-700 text-gray-400 uppercase tracking-widest mb-4">7 kunlik vazn</p>
+    <div style="position:relative;height:160px;width:100%;"><canvas id="chartWeight"></canvas></div>
+  </div>
+  <div class="stat-card bg-white">
+    <p id="txtCalChart" class="text-[11px] font-700 text-gray-400 uppercase tracking-widest mb-4">7 kunlik kaloriya</p>
+    <div style="position:relative;height:160px;width:100%;"><canvas id="chartCalorie"></canvas></div>
+  </div>
+</div>
+
+<div id="tab-settings" class="tab-panel max-w-md mx-auto px-5 pt-5 pb-6">
+  
+  <div class="settings-section bg-white">
+    <p id="txtThemeTitle" class="settings-section-title">Mavzu / Theme</p>
+    <div class="flex gap-2">
+      <button class="lang-btn flex-1" id="themeLight" onclick="setThemeMode('light')">🌞</button>
+      <button class="lang-btn flex-1" id="themeDark" onclick="setThemeMode('dark')">🌙</button>
+      <button class="lang-btn flex-1 active" id="themeAuto" onclick="setThemeMode('auto')">⚙️ Avto</button>
+    </div>
+  </div>
+
+  <div class="settings-section bg-white">
+    <p class="settings-section-title">Til / Language</p>
+    <div class="flex gap-2">
+      <button class="lang-btn active" id="langUz" onclick="switchLang('uz')">🇺🇿 UZ</button>
+      <button class="lang-btn" id="langEn" onclick="switchLang('en')">🇬🇧 EN</button>
+      <button class="lang-btn" id="langRu" onclick="switchLang('ru')">🇷🇺 RU</button>
+    </div>
+  </div>
+  
+  <div class="settings-section bg-white">
+    <p id="txtProfileTitle" class="settings-section-title">Mening profilim</p>
+    <p id="txtTDEESub" class="text-xs text-gray-400 mb-4 -mt-2">TDEE avtomatik hisoblanadi</p>
+    <div class="space-y-4">
+      <div>
+        <p id="txtGenderLabel" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Jins</p>
+        <div class="flex gap-2 bg-gray-100 p-1 rounded-2xl">
+          <button id="genderM" onclick="setGender('male')" class="gender-btn flex-1 active">👨 Erkak</button>
+          <button id="genderF" onclick="setGender('female')" class="gender-btn flex-1">👩 Ayol</button>
+        </div>
+      </div>
+      <div><p id="txtAgeLbl" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Yosh</p><input id="fieldAge" type="number" inputmode="numeric" min="10" max="100" class="field-input bg-gray-50" oninput="livePreview()" /></div>
+      <div><p id="txtHeightLbl" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Bo'y (sm)</p><input id="fieldHeight" type="number" inputmode="numeric" min="100" max="250" class="field-input bg-gray-50" oninput="livePreview()" /></div>
+      <div><p id="txtWeightLbl" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Vazn (kg)</p><input id="fieldWeight" type="number" inputmode="numeric" min="30" max="300" class="field-input bg-gray-50" oninput="livePreview()" /></div>
+
+      <div>
+        <p id="txtActivityLbl" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Aktivlik darajasi</p>
+        <select id="fieldActivity" class="field-input bg-gray-50" onchange="livePreview()">
+          <option id="optSedentary"   value="1.2">🛋️ Kam harakat (×1.2)</option>
+          <option id="optLight"       value="1.375">🚶 Yengil mashq (×1.375)</option>
+          <option id="optModerate"    value="1.55" selected>🏃 O'rtacha faol (×1.55)</option>
+          <option id="optVeryActive"  value="1.725">⚡ Juda faol (×1.725)</option>
+        </select>
+      </div>
+
+      <div>
+        <p id="txtGoalLbl" class="text-xs font-600 text-gray-400 uppercase tracking-widest mb-2">Maqsad</p>
+        <select id="fieldGoal" class="field-input bg-gray-50" onchange="livePreview()">
+          <option id="optLose"     value="lose">🔥 Ozish (−500 kcal)</option>
+          <option id="optMaintain" value="maintain" selected>⚖️ Vaznni saqlash</option>
+          <option id="optGain"     value="gain">💪 Massa yig'ish (+300 kcal)</option>
+        </select>
+      </div>
+
+      <div id="tdeePreview" class="hidden rounded-2xl p-4 flex items-center justify-between border border-mint-100 bg-mint-50 dark:bg-gray-800 dark:border-gray-700">
+        <div>
+          <p id="txtTDEELabel" class="text-xs font-600 text-mint-600 uppercase tracking-wide">Hisoblangan TDEE</p>
+          <p class="mt-0.5"><span id="tdeeValue" class="text-2xl text-mint-500" style="font-weight:800">—</span><span id="txtKcalDay" class="text-sm font-500 text-gray-400 ml-1">kcal/kun</span></p>
+        </div>
+        <div class="w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink:0 bg-mint-100 dark:bg-gray-700">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+      </div>
+      <button id="txtSaveBtn" onclick="saveProfile()" class="w-full bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3.5 font-700 text-sm shadow-card hover:opacity-90 active:scale-95 transition-all">Saqlash va qo'llash</button>
+    </div>
+  </div>
+</div>
+
+<nav class="bottom-nav bg-white/95">
+  <div class="max-w-md mx-auto flex items-center justify-around h-[60px] px-2">
+    <button class="nav-btn active" id="nav-home" onclick="switchTab('home')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span id="navTxtHome">Bosh</span>
+    </button>
+    <label class="nav-fab" for="fileInputNavCam" onclick="if(activeTab!=='home')switchTab('home')" aria-label="Kamerani ochish">
+      <input type="file" id="fileInputNavCam" accept="image/*" capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+    </label>
+    <button class="nav-btn" id="nav-analytics" onclick="switchTab('analytics')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span id="navTxtAnalytics">Tahlil</span>
+    </button>
+    <button class="nav-btn" id="nav-settings" onclick="switchTab('settings')">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      <span id="navTxtSettings">Sozlamalar</span>
+    </button>
+  </div>
+</nav>
+
+<div id="errorToast" class="hidden fixed z-50 max-w-[320px] w-[calc(100%-40px)]" style="bottom:80px;left:50%;transform:translateX(-50%)">
+  <div class="bg-white dark:bg-gray-800" style="border:1px solid #fecaca;border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,0.12);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+    <div style="width:32px;height:32px;border-radius:10px;background:#fef2f2;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    </div>
+    <p id="errorText" class="text-gray-800 dark:text-white" style="font-size:14px;font-weight:500;line-height:1.4;padding-top:4px;"></p>
+  </div>
+</div>
+
+<div id="successToast" class="hidden fixed z-50 max-w-[320px] w-[calc(100%-40px)]" style="bottom:80px;left:50%;transform:translateX(-50%)">
+  <div class="bg-white dark:bg-gray-800" style="border:1px solid #a7f3d0;border-radius:16px;box-shadow:0 8px 32px rgba(16,185,129,0.15);padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+    <div style="width:32px;height:32px;border-radius:10px;background:#ecfdf5;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <p id="successText" class="text-gray-800 dark:text-white" style="font-size:14px;font-weight:500;line-height:1.4;padding-top:4px;"></p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TARJIMA JADVALI (Tungi rejim so'zlari qo'shildi)
+// ============================================================
+const T = {
+  uz:{
+    dailyGoal:'Bugungi maqsad',remain:'Qoldi',protein:'Oqsil',fat:"Yog'",carbs:'Uglevod',
+    scanTitle:'Taomni yuklang',scanSub:'Kamera yoki Galereyadan tanlang',
+    cameraBtn:'Kamera',galleryBtn:'Galereya',
+    analyzing:'Taom tahlil qilinmoqda...',wait:'Bir lahza kuting',
+    resultLabel:'Tahlil natijasi',addLog:"✓ Kunlik hisobga qo'shish",rescan:'Qayta skanerlash',
+    profileTitle:'Mening profilim',tdeeSub:'TDEE avtomatik hisoblanadi',
+    themeTitle:'Mavzu',themeLight:'🌞 Kunduzgi',themeDark:'🌙 Tungi',themeAuto:'⚙️ Avto',
+    genderLabel:'Jins',male:'👨 Erkak',female:'👩 Ayol',
+    ageLbl:'Yosh',agePlaceholder:'Masalan: 25',
+    heightLbl:"Bo'y (sm)",heightPlaceholder:'Masalan: 175',
+    weightLbl:'Vazn (kg)',weightPlaceholder:'Masalan: 70',
+    activityLbl:'Aktivlik darajasi',
+    optSedentary:'🛋️ Kam harakat (×1.2)',optLight:'🚶 Yengil mashq (×1.375)',
+    optModerate:"🏃 O'rtacha faol (×1.55)",optVeryActive:'⚡ Juda faol (×1.725)',
+    goalLbl:'Maqsad',optLose:'🔥 Ozish (−500 kcal)',optMaintain:'⚖️ Vaznni saqlash',optGain:"💪 Massa yig'ish (+300 kcal)",
+    tdeeLabel:'Hisoblangan TDEE',kcalDay:'kcal/kun',saveBtn:"Saqlash va qo'llash",
+    fillAll:"Barcha maydonlarni to'ldiring",unknownErr:"Noma'lum xatolik yuz berdi.",
+    navHome:'Bosh',navAnalytics:'Tahlil',navSettings:'Sozlamalar',
+    currWeight:'Joriy vazn',targetWeight:'Maqsadli vazn',fromProfile:'Profildan',
+    bmiLabel:'BMI',underweight:'Yetishmovchi',healthy:'Normal',overweight:'Ortiqcha',obese:'Semiz',
+    weightChart:'7 kunlik vazn',calChart:'7 kunlik kaloriya',
+    goalLose:'Ozish rejimi',goalMaintain:'Vaznni saqlash',goalGain:"Massa yig'ish",
+    savedOk:'Profil muvaffaqiyatli saqlandi!'
+  },
+  en:{
+    dailyGoal:'Daily goal',remain:'Remaining',protein:'Protein',fat:'Fat',carbs:'Carbs',
+    scanTitle:'Photograph your meal',scanSub:'Use Camera or Gallery',
+    cameraBtn:'Camera',galleryBtn:'Gallery',
+    analyzing:'Analysing meal...',wait:'Please wait a moment',
+    resultLabel:'Analysis result',addLog:'✓ Add to daily log',rescan:'Scan again',
+    profileTitle:'My profile',tdeeSub:'TDEE is calculated automatically',
+    themeTitle:'Theme',themeLight:'🌞 Light',themeDark:'🌙 Dark',themeAuto:'⚙️ Auto',
+    genderLabel:'Gender',male:'👨 Male',female:'👩 Female',
+    ageLbl:'Age',agePlaceholder:'e.g. 25',
+    heightLbl:'Height (cm)',heightPlaceholder:'e.g. 175',
+    weightLbl:'Weight (kg)',weightPlaceholder:'e.g. 70',
+    activityLbl:'Activity level',
+    optSedentary:'🛋️ Sedentary (×1.2)',optLight:'🚶 Light exercise (×1.375)',
+    optModerate:'🏃 Moderately active (×1.55)',optVeryActive:'⚡ Very active (×1.725)',
+    goalLbl:'Goal',optLose:'🔥 Lose weight (−500 kcal)',optMaintain:'⚖️ Maintain weight',optGain:'💪 Build muscle (+300 kcal)',
+    tdeeLabel:'Calculated TDEE',kcalDay:'kcal/day',saveBtn:'Save & apply',
+    fillAll:'Please fill in all fields',unknownErr:'An unknown error occurred.',
+    navHome:'Home',navAnalytics:'Analytics',navSettings:'Settings',
+    currWeight:'Current weight',targetWeight:'Target weight',fromProfile:'From profile',
+    bmiLabel:'BMI',underweight:'Underweight',healthy:'Healthy',overweight:'Overweight',obese:'Obese',
+    weightChart:'7-day weight trend',calChart:'7-day calories',
+    goalLose:'Cutting',goalMaintain:'Maintenance',goalGain:'Bulking',
+    savedOk:'Profile saved successfully!'
+  },
+  ru:{
+    dailyGoal:'Дневная цель',remain:'Осталось',protein:'Белки',fat:'Жиры',carbs:'Углеводы',
+    scanTitle:'Загрузите блюдо',scanSub:'Камера или Галерея',
+    cameraBtn:'Камера',galleryBtn:'Галерея',
+    analyzing:'Анализ блюда...',wait:'Подождите немного',
+    resultLabel:'Результат анализа',addLog:'✓ Добавить в дневник',rescan:'Сканировать снова',
+    profileTitle:'Мой профиль',tdeeSub:'TDEE рассчитывается автоматически',
+    themeTitle:'Тема',themeLight:'🌞 Светлая',themeDark:'🌙 Тёмная',themeAuto:'⚙️ Авто',
+    genderLabel:'Пол',male:'👨 Мужской',female:'👩 Женский',
+    ageLbl:'Возраст',agePlaceholder:'Напр.: 25',
+    heightLbl:'Рост (см)',heightPlaceholder:'Напр.: 175',
+    weightLbl:'Вес (кг)',weightPlaceholder:'Напр.: 70',
+    activityLbl:'Уровень активности',
+    optSedentary:'🛋️ Малоподвижный (×1.2)',optLight:'🚶 Лёгкие нагрузки (×1.375)',
+    optModerate:'🏃 Умеренно активный (×1.55)',optVeryActive:'⚡ Очень активный (×1.725)',
+    goalLbl:'Цель',optLose:'🔥 Похудеть (−500 ккал)',optMaintain:'⚖️ Держать вес',optGain:'💪 Набрать массу (+300 ккал)',
+    tdeeLabel:'Рассчитанный TDEE',kcalDay:'ккал/день',saveBtn:'Сохранить и применить',
+    fillAll:'Пожалуйста, заполните все поля',unknownErr:'Произошла неизвестная ошибка.',
+    navHome:'Главная',navAnalytics:'Аналитика',navSettings:'Настройки',
+    currWeight:'Текущий вес',targetWeight:'Целевой вес',fromProfile:'Из профиля',
+    bmiLabel:'ИМТ',underweight:'Дефицит',healthy:'Норма',overweight:'Избыток',obese:'Ожирение',
+    weightChart:'Вес за 7 дней',calChart:'Калории за 7 дней',
+    goalLose:'Похудение',goalMaintain:'Поддержание',goalGain:'Набор массы',
+    savedOk:'Профиль успешно сохранён!'
+  }
+};
+
+const API_URL     = 'https://calories-production.up.railway.app/analyze-food';
+const TODAY_KEY   = 'cs_day_' + new Date().toISOString().slice(0, 10);
+const PROFILE_KEY = 'cs_profile';
+
+let activeLang     = 'uz';
+let currentResult  = null;
+let selectedGender = 'male';
+let toastTimer     = null;
+let successTimer   = null;
+let activeTab      = 'home';
+let chartWeight    = null;
+let chartCalorie   = null;
+
+try {
+  const u = JSON.parse(localStorage.getItem('cs_user'));
+  if (u && u.lang && T[u.lang]) activeLang = u.lang;
+} catch(e) {}
+
+// ============================================================
+// THEME (MAVZU) BOSHQARUVI
+// ============================================================
+let currentTheme = localStorage.getItem('cs_theme') || 'auto';
+
+function setThemeMode(mode) {
+  currentTheme = mode;
+  localStorage.setItem('cs_theme', mode);
+  applyThemeStyles();
+}
+
+function applyThemeStyles() {
+  ['light', 'dark', 'auto'].forEach(t => {
+    const b = document.getElementById('theme' + t.charAt(0).toUpperCase() + t.slice(1));
+    if (b) b.classList.toggle('active', currentTheme === t);
+  });
+
+  let isDark = false;
+  if (currentTheme === 'dark') {
+    isDark = true;
+  } else if (currentTheme === 'light') {
+    isDark = false;
+  } else {
+    // Avto rejim - Telegram sozlamasini o'qish
+    if (tg && tg.colorScheme) {
+      isDark = tg.colorScheme === 'dark';
+    } else {
+      isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    }
+  }
+
+  // Tailwind 'dark' klasini html tegiga qo'shish yoki olib tashlash
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+
+  // Telegram Header va Background ranglarini moslash
+  if (tg) {
+    try { tg.setHeaderColor(isDark ? '#111827' : '#ffffff'); } catch(e) {}
+    try { tg.setBackgroundColor(isDark ? '#111827' : '#F9FAFB'); } catch(e) {}
+  }
+
+  // Agar Tahlil (Analytics) oynasida bo'lsak, grafiklarni yangilaymiz
+  if (activeTab === 'analytics') {
+    renderAnalytics();
+  }
+}
+
+const tg = window.Telegram?.WebApp;
+if (tg) {
+  tg.ready();
+  tg.expand();
+  // Telegram mavzusi o'zgarganda avtomat eshitish
+  tg.onEvent('themeChanged', () => {
+    if (currentTheme === 'auto') applyThemeStyles();
+  });
+}
+
+
+async function handleFileChange(e) {
+  e.stopPropagation();
+
+  // Faylni darhol (sync) ushlash — async kutishdan oldin
+  const file = e.target.files && e.target.files[0];
+  e.target.value = ''; // Xuddi shu yerda reset: qayta tanlash imkonini beradi
+
+  if (!file) return;
+
+  if (tg && tg.HapticFeedback) {
+    try { tg.HapticFeedback.impactOccurred('light'); } catch(err) {}
+  }
+
+  showLoading();
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!res.ok) {
+      let detail = '';
+      try { detail = (await res.json()).detail || ''; } catch { detail = await res.text().catch(() => ''); }
+      throw new Error(detail || T[activeLang].unknownErr);
+    }
+
+    const data = await res.json();
+    currentResult = data;
+
+    if (tg && tg.HapticFeedback) {
+      try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
+    }
+
+    showResult(data);
+
+  } catch(err) {
+    showScan();
+    showError(err.message);
+
+    if (tg && tg.HapticFeedback) {
+      try { tg.HapticFeedback.notificationOccurred('error'); } catch(err2) {}
+    }
+  }
+}
+
+function showLoading() {
+  document.getElementById('scanBtn').classList.add('hidden');
+  document.getElementById('loadingState').classList.remove('hidden');
+  document.getElementById('resultCard').classList.add('hidden');
+}
+
+function showScan() {
+  document.getElementById('scanBtn').classList.remove('hidden');
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('resultCard').classList.add('hidden');
+}
+
+function showResult(data) {
+  document.getElementById('scanBtn').classList.add('hidden');
+  document.getElementById('loadingState').classList.add('hidden');
+  document.getElementById('resultCard').classList.remove('hidden');
+  document.getElementById('foodName').textContent = data.food_name;
+  animateCount(document.getElementById('calorieNum'), data.calories, '', 900);
+  setTimeout(() => {
+    animateCount(document.getElementById('proteinNum'), data.protein, 'g', 700);
+    animateCount(document.getElementById('fatNum'),    data.fat,     'g', 700);
+    animateCount(document.getElementById('carbsNum'),  data.carbs,   'g', 700);
+  }, 300);
+}
+
+function extractCleanMessage(raw) {
+  try { const p = JSON.parse(raw); if (p.detail) return p.detail; } catch {}
+  return raw.replace(/^(Error:|HTTPException:|Detail:|detail:)\s*/i, '').replace(/^\d{3}\s*[-:]?\s*/, '').trim();
+}
+
+function showError(msg) {
+  const cleaned = extractCleanMessage(String(msg));
+  document.getElementById('errorText').textContent = cleaned;
+  const toast = document.getElementById('errorToast');
+  toast.classList.remove('hidden');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.add('hidden'), 4000);
+}
+
+function showSuccess(msg) {
+  document.getElementById('successText').textContent = msg;
+  const toast = document.getElementById('successToast');
+  toast.classList.remove('hidden');
+  clearTimeout(successTimer);
+  successTimer = setTimeout(() => toast.classList.add('hidden'), 3500);
+}
+
+document.getElementById('addLogBtn').addEventListener('click', () => {
+  if (!currentResult) return;
+  const log = loadLog();
+  log.kcal    += currentResult.calories;
+  log.protein += currentResult.protein;
+  log.fat     += currentResult.fat;
+  log.carbs   += currentResult.carbs;
+  saveLog(log);
+  updateDashboard();
+  currentResult = null;
+  if (tg && tg.HapticFeedback) {
+    try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
+  }
+  showScan();
+});
+
+document.getElementById('rescanBtn').addEventListener('click', () => {
+  currentResult = null;
+  showScan();
+});
+
+function loadProfileIntoSettings() {
+  try {
+    const p = loadProfile();
+    if (p) {
+      setGender(p.gender || 'male', false);
+      document.getElementById('fieldAge').value      = p.age      || '';
+      document.getElementById('fieldHeight').value   = p.height   || '';
+      document.getElementById('fieldWeight').value   = p.weight   || '';
+      document.getElementById('fieldActivity').value = p.activity || '1.55';
+      document.getElementById('fieldGoal').value     = p.goal     || 'maintain';
+      if (p.tdee) showTDEEPreview(p.tdee);
+    } else {
+      setGender('male', false);
+      ['fieldAge','fieldHeight','fieldWeight'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('fieldActivity').value = '1.55';
+      document.getElementById('fieldGoal').value     = 'maintain';
+      document.getElementById('tdeePreview').classList.add('hidden');
+    }
+  } catch(e) { console.error(e); }
+}
+
+function setGender(g, preview) {
+  selectedGender = g;
+  document.getElementById('genderM').classList.toggle('active', g === 'male');
+  document.getElementById('genderF').classList.toggle('active', g === 'female');
+  if (preview !== false) livePreview();
+}
+
+function livePreview() {
+  const age      = parseInt(document.getElementById('fieldAge').value);
+  const height   = parseInt(document.getElementById('fieldHeight').value);
+  const weight   = parseInt(document.getElementById('fieldWeight').value);
+  const activity = parseFloat(document.getElementById('fieldActivity').value) || 1.55;
+  const goal     = document.getElementById('fieldGoal').value;
+  if (age && height && weight) showTDEEPreview(calcTDEE(selectedGender, age, height, weight, activity, goal));
+}
+
+function showTDEEPreview(tdee) {
+  document.getElementById('tdeePreview').classList.remove('hidden');
+  document.getElementById('tdeeValue').textContent = tdee;
+}
+
+async function saveProfile() {
+  const age      = parseInt(document.getElementById('fieldAge').value);
+  const height   = parseInt(document.getElementById('fieldHeight').value);
+  const weight   = parseInt(document.getElementById('fieldWeight').value);
+  const activity = parseFloat(document.getElementById('fieldActivity').value) || 1.55;
+  const goal     = document.getElementById('fieldGoal').value;
+
+  if (!age || !height || !weight) { showError(T[activeLang].fillAll); return; }
+
+  const tdee = calcTDEE(selectedGender, age, height, weight, activity, goal);
+  persistProfile({ gender: selectedGender, age, height, weight, activity, goal, tdee });
+
+  const tgUser    = tg?.initDataUnsafe?.user;
+  const telegram_id = tgUser ? tgUser.id : 123456789;
+
+  const payload = { telegram_id, gender: selectedGender, age, height, weight, activity_level: activity, goal, tdee };
+
+  try {
+    const saveUrl = API_URL.replace('/analyze-food', '/save-profile');
+    fetch(saveUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    }).catch(e => console.log('DB bilan ulanishda xato'));
+  } catch(e) { console.error(e); }
+
+  document.getElementById('profileDot').classList.remove('hidden');
+  if (tg && tg.HapticFeedback) {
+    try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
+  }
+  updateDashboard();
+  showSuccess(T[activeLang].savedOk);
+}
+
+function switchTab(name) {
+  try {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const panel  = document.getElementById('tab-' + name);
+    const navBtn = document.getElementById('nav-' + name);
+    if (!panel) return;
+    panel.classList.add('active');
+    if (navBtn) navBtn.classList.add('active');
+    activeTab = name;
+    if (name === 'settings')  loadProfileIntoSettings();
+    if (name === 'analytics') setTimeout(() => renderAnalytics(), 50);
+  } catch(e) { console.error(e); }
+}
+
+function switchLang(lang) {
+  if (!T[lang]) return;
+  activeLang = lang;
+  try {
+    const u = JSON.parse(localStorage.getItem('cs_user')) || {};
+    u.lang = lang;
+    localStorage.setItem('cs_user', JSON.stringify(u));
+  } catch(e) {}
+  applyLang();
+  if (activeTab === 'analytics') setTimeout(() => renderAnalytics(), 50);
+}
+
+function applyLang() {
+  const t = T[activeLang] || T.uz;
+  const s = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
+  s('txtDailyGoal', t.dailyGoal); s('txtRemain', t.remain); s('txtProteinLbl', t.protein);
+  s('txtFatLbl', t.fat); s('txtCarbsLbl', t.carbs); s('txtScanTitle', t.scanTitle);
+  s('txtScanSub', t.scanSub); s('txtCameraBtn', t.cameraBtn); s('txtGalleryBtn', t.galleryBtn); s('txtAnalyzing', t.analyzing); s('txtWait', t.wait);
+  s('txtResultLabel', t.resultLabel); s('txtResProtein', t.protein); s('txtResFat', t.fat);
+  s('txtResCarbs', t.carbs); s('addLogBtn', t.addLog); s('rescanBtn', t.rescan);
+  s('txtProfileTitle', t.profileTitle); s('txtTDEESub', t.tdeeSub);
+  
+  // Theme strings
+  s('txtThemeTitle', t.themeTitle);
+  document.getElementById('themeLight').innerHTML = t.themeLight;
+  document.getElementById('themeDark').innerHTML = t.themeDark;
+  document.getElementById('themeAuto').innerHTML = t.themeAuto;
+  
+  s('txtGenderLabel', t.genderLabel); s('genderM', t.male); s('genderF', t.female);
+  s('txtAgeLbl', t.ageLbl); s('txtHeightLbl', t.heightLbl); s('txtWeightLbl', t.weightLbl);
+  s('txtActivityLbl', t.activityLbl);
+  s('optSedentary', t.optSedentary); s('optLight', t.optLight);
+  s('optModerate', t.optModerate); s('optVeryActive', t.optVeryActive);
+  s('txtGoalLbl', t.goalLbl); s('optLose', t.optLose);
+  s('optMaintain', t.optMaintain); s('optGain', t.optGain);
+  s('txtTDEELabel', t.tdeeLabel); s('txtKcalDay', t.kcalDay); s('txtSaveBtn', t.saveBtn);
+  s('navTxtHome', t.navHome); s('navTxtAnalytics', t.navAnalytics); s('navTxtSettings', t.navSettings);
+  s('txtCurrWeight', t.currWeight); s('txtTargetWeight', t.targetWeight); s('txtFromProfile', t.fromProfile);
+  s('txtBMILabel', t.bmiLabel); s('txtUnderweight', t.underweight); s('txtHealthy', t.healthy);
+  s('txtOverweight', t.overweight); s('txtObese', t.obese);
+  s('txtWeightChart', t.weightChart); s('txtCalChart', t.calChart);
+
+  const ph = (id, txt) => { const e = document.getElementById(id); if (e) e.placeholder = txt; };
+  ph('fieldAge', t.agePlaceholder); ph('fieldHeight', t.heightPlaceholder); ph('fieldWeight', t.weightPlaceholder);
+
+  ['uz','en','ru'].forEach(l => {
+    const b = document.getElementById('lang' + l.charAt(0).toUpperCase() + l.slice(1));
+    if (b) b.classList.toggle('active', l === activeLang);
+  });
+}
+
+function calcTDEE(gender, age, height, weight, activity, goal) {
+  const bmr = gender === 'male'
+    ? (10 * weight) + (6.25 * height) - (5 * age) + 5
+    : (10 * weight) + (6.25 * height) - (5 * age) - 161;
+  let tdee = Math.round(bmr * activity);
+  if (goal === 'lose') tdee -= 500;
+  if (goal === 'gain') tdee += 300;
+  return Math.max(tdee, 1200);
+}
+
+function getDailyGoal() { const p = loadProfile(); return (p && p.tdee) ? p.tdee : 2000; }
+function loadLog()       { try { return JSON.parse(localStorage.getItem(TODAY_KEY)) || {kcal:0,protein:0,fat:0,carbs:0}; } catch { return {kcal:0,protein:0,fat:0,carbs:0}; } }
+function saveLog(d)      { localStorage.setItem(TODAY_KEY, JSON.stringify(d)); }
+function loadProfile()   { try { return JSON.parse(localStorage.getItem(PROFILE_KEY)); } catch { return null; } }
+function persistProfile(d){ localStorage.setItem(PROFILE_KEY, JSON.stringify(d)); }
+
+function animateCount(el, target, suffix, duration) {
+  if (!el) return;
+  const start = Date.now(), from = parseInt(el.textContent) || 0;
+  (function tick() {
+    const p = Math.min((Date.now() - start) / duration, 1), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(from + (target - from) * e) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  })();
+}
+
+function animateRing(id, value, maxVal) {
+  const circ = 188.5, pct = Math.min(value / maxVal, 1), offset = circ - pct * circ;
+  const el = document.getElementById(id);
+  if (el) setTimeout(() => { el.style.strokeDashoffset = offset; }, 60);
+}
+
+function updateDashboard() {
+  const log = loadLog(), goal = getDailyGoal();
+  const pct = Math.min(Math.round((log.kcal / goal) * 100), 100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('goalPercent').textContent = pct + '%';
+  document.getElementById('goalLabel').textContent = goal;
+  animateCount(document.getElementById('todayKcal'),  log.kcal, '', 600);
+  animateCount(document.getElementById('remainKcal'), Math.max(0, goal - log.kcal), '', 600);
+  document.getElementById('macroProteinVal').textContent = log.protein + 'g';
+  document.getElementById('macroFatVal').textContent     = log.fat     + 'g';
+  document.getElementById('macroCarbsVal').textContent   = log.carbs   + 'g';
+  animateRing('ringProtein', log.protein, 150);
+  animateRing('ringFat',     log.fat,     70);
+  animateRing('ringCarbs',   log.carbs,   300);
+}
+
+function renderAnalytics() {
+  try {
+    const p = loadProfile(), t = T[activeLang];
+    if (p && p.weight) {
+      document.getElementById('analyticsWeight').textContent = p.weight;
+      const tgt = p.goal === 'lose' ? Math.round(p.weight * 0.92) : p.goal === 'gain' ? Math.round(p.weight * 1.06) : p.weight;
+      document.getElementById('analyticsTargetWeight').textContent = tgt;
+      document.getElementById('analyticsGoalLabel').textContent = p.goal === 'lose' ? t.goalLose : p.goal === 'gain' ? t.goalGain : t.goalMaintain;
+    } else {
+      ['analyticsWeight','analyticsTargetWeight'].forEach(id => document.getElementById(id).textContent = '—');
+      document.getElementById('analyticsGoalLabel').textContent = '—';
+    }
+
+    if (p && p.height && p.weight) {
+      const h = p.height / 100, bmi = (p.weight / (h * h)).toFixed(1), n = parseFloat(bmi);
+      document.getElementById('bmiValue').textContent = bmi;
+      let cat, col;
+      if (n < 18.5)      { cat = t.underweight; col = '#60a5fa'; }
+      else if (n < 25)   { cat = t.healthy;     col = '#34d399'; }
+      else if (n < 30)   { cat = t.overweight;  col = '#fbbf24'; }
+      else               { cat = t.obese;        col = '#f87171'; }
+      const ce = document.getElementById('bmiCategory');
+      ce.textContent = cat; ce.style.background = col + '22'; ce.style.color = col;
+      const pct = Math.min(Math.max(((n - 15) / 25) * 100, 0), 100);
+      document.getElementById('bmiNeedle').style.left = pct + '%';
+    } else {
+      document.getElementById('bmiValue').textContent    = '—';
+      document.getElementById('bmiCategory').textContent = '—';
+      document.getElementById('bmiNeedle').style.left    = '0%';
+    }
+
+    const dayNames = {
+      uz: ['Yak','Dush','Sesh','Chor','Pay','Jum','Shan'],
+      ru: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+      en: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+    };
+    const days = [], wData = [], cData = [];
+    const today = new Date(), baseW = p && p.weight ? p.weight : 0;
+
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(today.getDate() - i);
+      days.push(dayNames[activeLang][d.getDay()]);
+      const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      let dayKcal = 0;
+      try { const dayData = JSON.parse(localStorage.getItem('cs_day_' + dateStr)); if (dayData && dayData.kcal) dayKcal = dayData.kcal; } catch(e) {}
+      cData.push(dayKcal);
+      wData.push(baseW);
+    }
+
+    if (chartWeight)  { try { chartWeight.destroy(); }  catch(e) {} chartWeight  = null; }
+    if (chartCalorie) { try { chartCalorie.destroy(); } catch(e) {} chartCalorie = null; }
+
+    const cwCanvas = document.getElementById('chartWeight');
+    const ccCanvas = document.getElementById('chartCalorie');
+    
+    // Tungi rejimga qarab grafik chiziqlari rangini sozlash
+    const isDark = document.documentElement.classList.contains('dark');
+    const gridColor = isDark ? '#374151' : '#f3f4f6';
+    const textColor = '#9ca3af';
+
+    const yAxisOptions = {
+      display: true,
+      ticks:  { font: { family: 'Poppins', size: 10 }, color: textColor, maxTicksLimit: 5 },
+      grid:   { color: gridColor, borderDash: [5, 5] },
+      border: { display: false }
+    };
+    const xAxisOptions = { 
+      grid: { display: false }, 
+      ticks: { font: { family: 'Poppins', size: 10 }, color: textColor } 
+    };
+
+    if (cwCanvas && baseW > 0) {
+      chartWeight = new Chart(cwCanvas, {
+        type: 'line',
+        data: { labels: days, datasets: [{ data: wData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: isDark ? '#1f2937' : '#fff', pointBorderColor: '#10b981' }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Poppins' }, bodyFont: { family: 'Poppins' }, padding: 10, cornerRadius: 8, displayColors: false, callbacks: { label: (ctx) => ctx.parsed.y.toFixed(1) + ' kg' } } }, scales: { x: xAxisOptions, y: yAxisOptions } }
+      });
+    }
+    if (ccCanvas) {
+      chartCalorie = new Chart(ccCanvas, {
+        type: 'bar',
+        data: { labels: days, datasets: [{ data: cData, backgroundColor: cData.map((v, i) => i === 6 ? '#10b981' : (isDark ? '#4b5563' : '#e5e7eb')), borderRadius: 4, barThickness: 12 }] },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Poppins' }, bodyFont: { family: 'Poppins' }, padding: 10, cornerRadius: 8, displayColors: false, callbacks: { label: (ctx) => Math.round(ctx.parsed.y) + ' kcal' } } }, scales: { x: xAxisOptions, y: yAxisOptions } }
+      });
+    }
+  } catch(e) { console.error(e); }
+}
+
+// ============================================================
+// FAYL INPUT EVENT LISTENERLAR
+// ============================================================
+(function attachFileInputs() {
+  const cameraInput  = document.getElementById('fileInputCamera');
+  const galleryInput = document.getElementById('fileInputGallery');
+  const navCamInput  = document.getElementById('fileInputNavCam');
+  if (cameraInput)  cameraInput.addEventListener('change',  handleFileChange);
+  if (galleryInput) galleryInput.addEventListener('change', handleFileChange);
+  if (navCamInput)  navCamInput.addEventListener('change',  handleFileChange);
+})();
+
+(function init() {
+  applyThemeStyles();
+  applyLang();
+  if (loadProfile()) document.getElementById('profileDot').classList.remove('hidden');
+  updateDashboard();
+})();
+</script>
+</body>
+</html>
