@@ -363,13 +363,9 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════
-     ONBOARDING OVERLAY  (Step 0 = Language first)
-═══════════════════════════════════════════════════ -->
 <div id="onboarding">
   <div style="width:100%;max-width:420px;">
 
-    <!-- Logo -->
     <div style="text-align:center;margin-bottom:36px;">
       <div style="width:68px;height:68px;border-radius:50%;background:linear-gradient(135deg,#00FF88,#10B981);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 28px rgba(0,255,136,0.5);margin-bottom:14px;">
         <span style="font-size:30px;">🧬</span>
@@ -377,7 +373,6 @@
       <h1 class="font-display" style="font-size:26px;font-weight:800;color:#fff;" data-i18n="obWelcome">Welcome to NutriAura</h1>
     </div>
 
-    <!-- Progress dots -->
     <div class="ob-progress" id="ob-progress">
       <div class="ob-dot active" id="ob-dot-0"></div>
       <div class="ob-dot" id="ob-dot-1"></div>
@@ -387,7 +382,6 @@
       <div class="ob-dot" id="ob-dot-5"></div>
     </div>
 
-    <!-- STEP 0 — Language selection -->
     <div class="ob-step active" id="ob-step-0">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obChooseLang">Choose your language</p>
       <button class="lang-btn" onclick="selectLang('uz')"><span style="font-size:22px;">🇺🇿</span> O'zbek</button>
@@ -395,7 +389,6 @@
       <button class="lang-btn" onclick="selectLang('ru')"><span style="font-size:22px;">🇷🇺</span> Русский</button>
     </div>
 
-    <!-- STEP 1 — Name -->
     <div class="ob-step" id="ob-step-1">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obStep1">What's your name?</p>
       <input class="input-glass mb-6" type="text" id="ob-name" data-i18n-ph="namePlaceholder" placeholder="Your name">
@@ -405,7 +398,6 @@
       </div>
     </div>
 
-    <!-- STEP 2 — Gender -->
     <div class="ob-step" id="ob-step-2">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obStep2">Biological Sex</p>
       <div class="seg-control mb-6" id="ob-gender-control">
@@ -418,7 +410,6 @@
       </div>
     </div>
 
-    <!-- STEP 3 — Measurements -->
     <div class="ob-step" id="ob-step-3">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obStep3">Your measurements</p>
       <div class="flex gap-3 mb-3">
@@ -441,7 +432,6 @@
       </div>
     </div>
 
-    <!-- STEP 4 — Activity -->
     <div class="ob-step" id="ob-step-4">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obStep4">Activity Level</p>
       <div class="seg-control mb-6" id="ob-activity-control">
@@ -456,7 +446,6 @@
       </div>
     </div>
 
-    <!-- STEP 5 — Goal -->
     <div class="ob-step" id="ob-step-5">
       <p class="text-center mb-6" style="color:rgba(255,255,255,0.45);font-size:13px;" data-i18n="obStep5">Your Goal</p>
       <div class="seg-control mb-6" id="ob-goal-control">
@@ -473,21 +462,14 @@
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════
-     MAIN APP
-═══════════════════════════════════════════════════ -->
 <div class="bg-mesh"></div>
 
 <div id="app" style="position:relative; z-index:1;">
 
   <div class="tab-content" id="tab-content">
 
-    <!-- ╔══════════════════════════════╗
-         ║         HOME TAB            ║
-         ╚══════════════════════════════╝ -->
     <div id="tab-home" class="tab-panel active px-4 pt-6">
 
-      <!-- Header -->
       <div class="flex items-center justify-between mb-6">
         <div>
           <p class="text-xs text-gray-500 mb-0.5 uppercase tracking-widest font-display" data-i18n="goodMorning">Good Morning</p>
@@ -498,97 +480,91 @@
         </div>
       </div>
 
-      <!-- BUG 2 FIX: Calorie Ring Card — Burned removed, Goal+Consumed shown, Remaining = goal - consumed -->
       <div class="glass p-6 mb-4 flex items-center gap-6">
         <div class="calorie-ring flex-shrink-0">
           <svg width="200" height="200" viewBox="0 0 200 200">
             <circle class="ring-track" cx="100" cy="100" r="88" fill="none" stroke-width="10"/>
             <circle class="ring-fill" cx="100" cy="100" r="88" fill="none" stroke-width="10"
               stroke-dasharray="553"
-              stroke-dashoffset="152"
+              stroke-dashoffset="553"
               id="calorie-ring-circle"/>
           </svg>
           <div class="center-text">
-            <span class="text-3xl font-bold font-display" id="calories-consumed">1,624</span>
-            <span class="text-xs text-gray-400 mt-0.5" id="ring-of-goal">of 2,200</span>
+            <span class="text-3xl font-bold font-display" id="calories-consumed">0</span>
+            <span class="text-xs text-gray-400 mt-0.5" id="ring-of-goal">of 0</span>
             <span class="text-[10px] mt-1" style="color:#00FF88;" data-i18n="kcal">kcal</span>
           </div>
         </div>
         <div class="flex-1">
           <p class="text-xs text-gray-500 mb-3 uppercase tracking-wider" data-i18n="remaining">Remaining</p>
-          <p class="text-4xl font-bold font-display" style="color:#00FF88;" id="calories-remaining">576</p>
+          <p class="text-4xl font-bold font-display" style="color:#00FF88;" id="calories-remaining">0</p>
           <p class="text-xs text-gray-500 mt-1" data-i18n="caloriesLeft">calories left</p>
 
           <div class="flex gap-2 mt-4">
             <div class="stat-badge text-center flex-1">
               <p class="text-xs text-gray-500" data-i18n="goal">Goal</p>
-              <p class="text-sm font-semibold" id="calories-goal">2,200</p>
+              <p class="text-sm font-semibold" id="calories-goal">0</p>
             </div>
             <div class="stat-badge text-center flex-1">
               <p class="text-xs text-gray-500" data-i18n="consumed">Consumed</p>
-              <p class="text-sm font-semibold" id="calories-consumed-badge">1,624</p>
+              <p class="text-sm font-semibold" id="calories-consumed-badge">0</p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Macros -->
       <div class="glass p-5 mb-4">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold font-display text-sm tracking-wide" data-i18n="macros">Macronutrients</h3>
           <span class="text-xs text-gray-500" data-i18n="today">Today</span>
         </div>
         <div class="space-y-4">
-          <!-- Protein -->
           <div>
             <div class="flex justify-between text-sm mb-2">
               <span class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full" style="background:#00FF88;"></span>
                 <span class="text-gray-300" data-i18n="protein">Protein</span>
               </span>
-              <span><span class="font-semibold" id="protein-g">124</span><span class="text-gray-500">/ 165g</span></span>
+              <span><span class="font-semibold" id="protein-g">0</span><span class="text-gray-500" id="protein-goal">/ 0g</span></span>
             </div>
             <div class="macro-bar-track">
-              <div class="macro-bar-fill bar-protein" id="protein-bar" style="width:75%;"></div>
+              <div class="macro-bar-fill bar-protein" id="protein-bar" style="width:0%;"></div>
             </div>
           </div>
-          <!-- Carbs -->
           <div>
             <div class="flex justify-between text-sm mb-2">
               <span class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full" style="background:#3B82F6;"></span>
                 <span class="text-gray-300" data-i18n="carbs">Carbs</span>
               </span>
-              <span><span class="font-semibold" id="carbs-g">188</span><span class="text-gray-500">/ 275g</span></span>
+              <span><span class="font-semibold" id="carbs-g">0</span><span class="text-gray-500" id="carbs-goal">/ 0g</span></span>
             </div>
             <div class="macro-bar-track">
-              <div class="macro-bar-fill bar-carbs" id="carbs-bar" style="width:68%;"></div>
+              <div class="macro-bar-fill bar-carbs" id="carbs-bar" style="width:0%;"></div>
             </div>
           </div>
-          <!-- Fat -->
           <div>
             <div class="flex justify-between text-sm mb-2">
               <span class="flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full" style="background:#F59E0B;"></span>
                 <span class="text-gray-300" data-i18n="fat">Fat</span>
               </span>
-              <span><span class="font-semibold" id="fat-g">48</span><span class="text-gray-500">/ 73g</span></span>
+              <span><span class="font-semibold" id="fat-g">0</span><span class="text-gray-500" id="fat-goal">/ 0g</span></span>
             </div>
             <div class="macro-bar-track">
-              <div class="macro-bar-fill bar-fat" id="fat-bar" style="width:66%;"></div>
+              <div class="macro-bar-fill bar-fat" id="fat-bar" style="width:0%;"></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Streak + Water + Steps -->
       <div class="flex gap-3 mb-4">
         <div class="glass p-4 flex-1">
           <div class="flex items-center gap-2 mb-2">
             <span>🔥</span>
             <span class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="streak">Streak</span>
           </div>
-          <p class="text-2xl font-bold font-display" id="streak-days">14</p>
+          <p class="text-2xl font-bold font-display" id="streak-days">0</p>
           <p class="text-xs text-gray-500 mt-0.5" data-i18n="days">days</p>
         </div>
         <div class="glass p-4 flex-1">
@@ -596,7 +572,7 @@
             <span>💧</span>
             <span class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="water">Water</span>
           </div>
-          <p class="text-2xl font-bold font-display" id="water-ml">1.8</p>
+          <p class="text-2xl font-bold font-display" id="water-ml">0.0</p>
           <p class="text-xs text-gray-500 mt-0.5" data-i18n="waterOf">of 2.5 L</p>
         </div>
         <div class="glass p-4 flex-1">
@@ -604,70 +580,27 @@
             <span>🏃</span>
             <span class="text-xs text-gray-400 uppercase tracking-wider" data-i18n="steps">Steps</span>
           </div>
-          <p class="text-2xl font-bold font-display" id="steps-count">7.2k</p>
+          <p class="text-2xl font-bold font-display" id="steps-count">0</p>
           <p class="text-xs text-gray-500 mt-0.5" data-i18n="stepsOf">of 10k</p>
         </div>
       </div>
 
-      <!-- Today's Meals -->
       <div class="glass p-5 mb-4">
         <div class="flex items-center justify-between mb-4">
           <h3 class="font-semibold font-display text-sm tracking-wide" data-i18n="todaysMeals">Today's Meals</h3>
-          <button class="text-xs" style="color:#00FF88;" data-i18n="addBtn">+ Add</button>
+          <button class="text-xs" style="color:#00FF88;" data-i18n="addBtn" onclick="manualAddMeal()">+ Add</button>
         </div>
         <div class="space-y-3" id="meals-list">
-          <div class="flex items-center gap-3">
-            <div class="meal-icon" style="background:rgba(0,255,136,0.1);">🥣</div>
-            <div class="flex-1">
-              <p class="text-sm font-medium">Oatmeal with Berries</p>
-              <p class="text-xs text-gray-500"><span data-i18n="breakfast">Breakfast</span> · 7:30 AM</p>
-            </div>
-            <span class="text-sm font-semibold">342 <span data-i18n="kcal">kcal</span></span>
           </div>
-          <div style="height:1px;background:rgba(255,255,255,0.04);"></div>
-          <div class="flex items-center gap-3">
-            <div class="meal-icon" style="background:rgba(59,130,246,0.1);">🥗</div>
-            <div class="flex-1">
-              <p class="text-sm font-medium">Grilled Chicken Salad</p>
-              <p class="text-xs text-gray-500"><span data-i18n="lunch">Lunch</span> · 1:00 PM</p>
-            </div>
-            <span class="text-sm font-semibold">528 <span data-i18n="kcal">kcal</span></span>
-          </div>
-          <div style="height:1px;background:rgba(255,255,255,0.04);"></div>
-          <div class="flex items-center gap-3">
-            <div class="meal-icon" style="background:rgba(245,158,11,0.1);">🍫</div>
-            <div class="flex-1">
-              <p class="text-sm font-medium">Protein Bar</p>
-              <p class="text-xs text-gray-500"><span data-i18n="snack">Snack</span> · 3:45 PM</p>
-            </div>
-            <span class="text-sm font-semibold">210 <span data-i18n="kcal">kcal</span></span>
-          </div>
-          <div style="height:1px;background:rgba(255,255,255,0.04);"></div>
-          <div class="flex items-center gap-3">
-            <div class="meal-icon" style="background:rgba(249,115,22,0.1);">🍝</div>
-            <div class="flex-1">
-              <p class="text-sm font-medium">Pasta Bolognese</p>
-              <p class="text-xs text-gray-500"><span data-i18n="dinner">Dinner</span> · 7:15 PM</p>
-            </div>
-            <span class="text-sm font-semibold">544 <span data-i18n="kcal">kcal</span></span>
-          </div>
-        </div>
       </div>
 
-    </div><!-- /tab-home -->
-
-
-    <!-- ╔══════════════════════════════╗
-         ║        SCAN TAB             ║
-         ╚══════════════════════════════╝ -->
-    <div id="tab-scan" class="tab-panel px-4 pt-6">
+    </div><div id="tab-scan" class="tab-panel px-4 pt-6">
 
       <div class="mb-6">
         <p class="text-xs text-gray-500 uppercase tracking-widest mb-1" data-i18n="aiScanner">AI Scanner</p>
         <h2 class="text-2xl font-bold font-display" data-i18n="scanFood">Scan Food</h2>
       </div>
 
-      <!-- Viewfinder -->
       <div class="viewfinder mb-5" id="scan-viewfinder">
         <svg style="position:absolute;inset:0;width:100%;height:100%;opacity:0.07;" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -690,46 +623,39 @@
         <div style="position:absolute;bottom:20px;left:0;right:0;text-align:center;">
           <p class="text-xs text-gray-500" data-i18n="pointAtFood">Point at food to identify</p>
         </div>
-        <!-- Invisible iOS camera input (DO NOT REMOVE OR BREAK) -->
-        <input type="file" id="camera-input" accept="image/*" capture="environment" style="width:0.1px;height:0.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1;" onchange="handleScan(this)">
-        <!-- Invisible gallery input (DO NOT REMOVE OR BREAK) -->
-        <input type="file" id="gallery-input" accept="image/*" style="width:0.1px;height:0.1px;opacity:0;overflow:hidden;position:absolute;z-index:-1;" onchange="handleScan(this)">
       </div>
 
-      <!-- Action buttons — text wrapped in spans for i18n without breaking SVG -->
       <div class="flex gap-3 mb-5">
-        <button class="btn-neon flex-1 py-4 flex flex-col items-center gap-2 text-sm font-semibold"
-          onclick="document.getElementById('camera-input').click()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+        <div class="btn-neon flex-1 py-4 flex flex-col items-center gap-2 text-sm font-semibold relative overflow-hidden">
+          <input type="file" id="camera-input" accept="image/*" capture="environment" style="opacity:0;width:100%;height:100%;position:absolute;inset:0;z-index:999;cursor:pointer;" onchange="handleScan(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" class="pointer-events-none">
             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
             <circle cx="12" cy="13" r="4"/>
           </svg>
-          <span data-i18n="camera">Camera</span>
-        </button>
-        <button class="btn-neon flex-1 py-4 flex flex-col items-center gap-2 text-sm font-semibold"
-          onclick="document.getElementById('gallery-input').click()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+          <span class="pointer-events-none" data-i18n="camera">Camera</span>
+        </div>
+        <div class="btn-neon flex-1 py-4 flex flex-col items-center gap-2 text-sm font-semibold relative overflow-hidden">
+          <input type="file" id="gallery-input" accept="image/*" style="opacity:0;width:100%;height:100%;position:absolute;inset:0;z-index:999;cursor:pointer;" onchange="handleScan(this)">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" class="pointer-events-none">
             <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
             <polyline points="21 15 16 10 5 21"/>
           </svg>
-          <span data-i18n="gallery">Gallery</span>
-        </button>
+          <span class="pointer-events-none" data-i18n="gallery">Gallery</span>
+        </div>
       </div>
 
-      <!-- Scan loading indicator -->
       <div class="glass p-5 mb-4 text-center" id="scan-loading" style="display:none;">
         <div style="width:32px;height:32px;border:2px solid rgba(0,255,136,0.2);border-top-color:#00FF88;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;"></div>
         <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
         <p class="text-sm text-gray-400" data-i18n="scanLoading">Analyzing food…</p>
       </div>
 
-      <!-- Result card (initially hidden) -->
       <div class="glass p-5 mb-4" id="scan-result" style="display:none;">
         <div class="flex items-center gap-3 mb-4">
           <div style="width:48px;height:48px;border-radius:14px;background:rgba(0,255,136,0.1);display:flex;align-items:center;justify-content:center;font-size:24px;">🍱</div>
           <div>
             <p class="font-semibold font-display" id="scan-food-name">Chicken Rice Bowl</p>
-            <p class="text-xs text-gray-500" id="scan-food-portion">1 serving · 350g est.</p>
+            <p class="text-xs text-gray-500" id="scan-food-portion">1 serving</p>
           </div>
           <span class="ml-auto font-bold text-lg" style="color:#00FF88;" id="scan-calories">482</span>
         </div>
@@ -752,7 +678,6 @@
         </button>
       </div>
 
-      <!-- Tips -->
       <div class="glass p-4 mb-4" style="border-color:rgba(0,255,136,0.12);">
         <div class="flex items-start gap-3">
           <span style="color:#00FF88;font-size:18px;margin-top:1px;">⚡</span>
@@ -763,29 +688,21 @@
         </div>
       </div>
 
-    </div><!-- /tab-scan -->
-
-
-    <!-- ╔══════════════════════════════╗
-         ║      HISTORY TAB            ║
-         ╚══════════════════════════════╝ -->
-    <div id="tab-history" class="tab-panel px-4 pt-6">
+    </div><div id="tab-history" class="tab-panel px-4 pt-6">
 
       <div class="mb-5">
         <p class="text-xs text-gray-500 uppercase tracking-widest mb-1" data-i18n="analytics">Analytics</p>
         <h2 class="text-2xl font-bold font-display" data-i18n="historyTitle">History</h2>
       </div>
 
-      <!-- Week calendar strip -->
       <div class="glass p-4 mb-4">
         <div class="flex items-center justify-between mb-3">
           <span class="text-sm font-semibold font-display" id="history-month-label">May 2026</span>
-          <button class="text-xs" style="color:#00FF88;" data-i18n="seeAll">See All →</button>
+          <button class="text-xs" style="color:#00FF88;" data-i18n="seeAll" onclick="switchTab('history')">See All →</button>
         </div>
         <div class="week-strip" id="week-strip"></div>
       </div>
 
-      <!-- Weekly summary -->
       <div class="glass p-5 mb-4">
         <p class="text-xs text-gray-500 uppercase tracking-wider mb-4" data-i18n="weeklyAverage">Weekly Average</p>
         <div class="flex justify-between">
@@ -802,7 +719,6 @@
             <p class="text-xs text-gray-500 mt-1" data-i18n="goalHit">goal hit</p>
           </div>
         </div>
-        <!-- Simple bar chart -->
         <div class="mt-5 flex items-end gap-2 justify-between" style="height:64px;">
           <div class="flex flex-col items-center gap-1 flex-1">
             <div style="background:rgba(0,255,136,0.5);border-radius:4px 4px 0 0;width:100%;height:72%;"></div>
@@ -835,81 +751,8 @@
         </div>
       </div>
 
-      <!-- Timeline -->
-      <div class="glass p-5 mb-4">
-        <p class="text-xs text-gray-500 uppercase tracking-wider mb-4" data-i18n="todaysTimeline">Today's Timeline</p>
-        <div class="space-y-0" id="timeline-list">
+    </div><div id="tab-profile" class="tab-panel px-4 pt-6">
 
-          <div class="flex gap-4">
-            <div class="flex flex-col items-center">
-              <div class="timeline-dot"></div>
-              <div class="timeline-line"></div>
-            </div>
-            <div class="pb-5">
-              <p class="text-xs text-gray-500 mb-0.5">7:30 AM</p>
-              <p class="text-sm font-semibold" data-i18n="breakfast">Breakfast</p>
-              <p class="text-xs text-gray-400">Oatmeal with Berries · 342 kcal</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4">
-            <div class="flex flex-col items-center">
-              <div class="timeline-dot" style="background:#3B82F6;box-shadow:0 0 8px rgba(59,130,246,0.6);"></div>
-              <div class="timeline-line" style="background:linear-gradient(180deg,rgba(59,130,246,0.3),transparent);"></div>
-            </div>
-            <div class="pb-5">
-              <p class="text-xs text-gray-500 mb-0.5">1:00 PM</p>
-              <p class="text-sm font-semibold" data-i18n="lunch">Lunch</p>
-              <p class="text-xs text-gray-400">Grilled Chicken Salad · 528 kcal</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4">
-            <div class="flex flex-col items-center">
-              <div class="timeline-dot" style="background:#F59E0B;box-shadow:0 0 8px rgba(245,158,11,0.6);"></div>
-              <div class="timeline-line" style="background:linear-gradient(180deg,rgba(245,158,11,0.3),transparent);"></div>
-            </div>
-            <div class="pb-5">
-              <p class="text-xs text-gray-500 mb-0.5">3:45 PM</p>
-              <p class="text-sm font-semibold" data-i18n="snack">Snack</p>
-              <p class="text-xs text-gray-400">Protein Bar · 210 kcal</p>
-            </div>
-          </div>
-
-          <div class="flex gap-4">
-            <div class="flex flex-col items-center">
-              <div class="timeline-dot" style="background:#F97316;box-shadow:0 0 8px rgba(249,115,22,0.6);"></div>
-            </div>
-            <div class="pb-2">
-              <p class="text-xs text-gray-500 mb-0.5">7:15 PM</p>
-              <p class="text-sm font-semibold" data-i18n="dinner">Dinner</p>
-              <p class="text-xs text-gray-400">Pasta Bolognese · 544 kcal</p>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Nutrient trend tags -->
-      <div class="glass p-4 mb-4">
-        <p class="text-xs text-gray-500 uppercase tracking-wider mb-3" data-i18n="weekInsights">This Week's Insights</p>
-        <div class="flex flex-wrap gap-2">
-          <span class="px-3 py-1.5 text-xs rounded-full" style="background:rgba(0,255,136,0.1);border:1px solid rgba(0,255,136,0.25);color:#00FF88;">✦ Protein Goal Met ×5</span>
-          <span class="px-3 py-1.5 text-xs rounded-full" style="background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);color:#93C5FD;">📉 Under carbs avg</span>
-          <span class="px-3 py-1.5 text-xs rounded-full" style="background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.25);color:#FCD34D;">🔥 14-day streak!</span>
-          <span class="px-3 py-1.5 text-xs rounded-full" style="background:rgba(249,115,22,0.1);border:1px solid rgba(249,115,22,0.25);color:#FDBA74;">💧 Hydration low</span>
-        </div>
-      </div>
-
-    </div><!-- /tab-history -->
-
-
-    <!-- ╔══════════════════════════════╗
-         ║      PROFILE TAB            ║
-         ╚══════════════════════════════╝ -->
-    <div id="tab-profile" class="tab-panel px-4 pt-6">
-
-      <!-- Profile header -->
       <div class="glass p-5 mb-4 flex items-center gap-4">
         <div class="avatar-ring">
           <div class="avatar-inner">🧬</div>
@@ -920,24 +763,21 @@
         </div>
         <div class="streak-badge">
           <span>🔥</span>
-          <span class="text-sm font-bold" style="color:#00FF88;" id="profile-streak">14</span>
+          <span class="text-sm font-bold" style="color:#00FF88;" id="profile-streak">0</span>
         </div>
       </div>
 
-      <!-- TDEE Calculator -->
       <div class="glass p-5 mb-4">
         <div class="flex items-center gap-2 mb-5">
           <span style="color:#00FF88;">⚡</span>
           <h3 class="font-bold font-display" data-i18n="tdeeCalc">TDEE Calculator</h3>
         </div>
 
-        <!-- Name -->
         <div class="mb-4">
           <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="name">Name</label>
-          <input class="input-glass" type="text" id="user-name" data-i18n-ph="namePlaceholder" placeholder="Your name" value="Alex Johnson">
+          <input class="input-glass" type="text" id="user-name" data-i18n-ph="namePlaceholder" placeholder="Your name">
         </div>
 
-        <!-- Age & Height row -->
         <div class="flex gap-3 mb-4">
           <div class="flex-1">
             <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="age">Age</label>
@@ -949,13 +789,11 @@
           </div>
         </div>
 
-        <!-- Weight -->
         <div class="mb-4">
           <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="weightKg">Weight (kg)</label>
           <input class="input-glass" type="number" id="user-weight" data-i18n-ph="weightPlaceholder" placeholder="75" min="30" max="300">
         </div>
 
-        <!-- Gender -->
         <div class="mb-4">
           <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="bioSex">Biological Sex</label>
           <div class="seg-control" id="gender-control">
@@ -964,7 +802,6 @@
           </div>
         </div>
 
-        <!-- Activity -->
         <div class="mb-4">
           <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="activityLevel">Activity Level</label>
           <div class="seg-control" id="activity-control">
@@ -975,7 +812,6 @@
           </div>
         </div>
 
-        <!-- Goal -->
         <div class="mb-5">
           <label class="text-xs text-gray-500 uppercase tracking-wider mb-2 block" data-i18n="goalLabel">Goal</label>
           <div class="seg-control" id="goal-control">
@@ -985,13 +821,11 @@
           </div>
         </div>
 
-        <!-- Calculate button -->
         <button class="btn-neon w-full py-4 font-semibold text-sm" onclick="calculateTDEE()" data-i18n="calcTdee">
           ⚡ Calculate My TDEE
         </button>
       </div>
 
-      <!-- TDEE Result (hidden until calculated) -->
       <div class="glass p-6 mb-4" id="tdee-result-card" style="display:none;border-color:rgba(0,255,136,0.2);box-shadow:0 0 30px rgba(0,255,136,0.08);">
         <p class="text-xs text-gray-500 uppercase tracking-widest text-center mb-2" data-i18n="dailyTarget">Your Daily Target</p>
         <p class="tdee-glow text-center font-bold font-display" style="font-size:52px;line-height:1;" id="tdee-value">2,200</p>
@@ -1016,12 +850,10 @@
         </button>
       </div>
 
-      <!-- App settings -->
       <div class="glass p-5 mb-4">
         <p class="text-xs text-gray-500 uppercase tracking-wider mb-4" data-i18n="preferences">Preferences</p>
         <div class="space-y-4">
 
-          <!-- Language switcher -->
           <div class="flex items-center justify-between">
             <span class="text-sm" data-i18n="language">Language</span>
             <div class="flex gap-1">
@@ -1047,28 +879,12 @@
               <div style="position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:rgba(255,255,255,0.3);transition:all 0.2s;"></div>
             </div>
           </div>
-          <div style="height:1px;background:rgba(255,255,255,0.04);"></div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm" data-i18n="metricUnits">Metric Units</span>
-            <div style="width:44px;height:24px;border-radius:99px;background:rgba(0,255,136,0.2);border:1px solid rgba(0,255,136,0.4);position:relative;cursor:pointer;" onclick="toggleSwitch(this)">
-              <div style="position:absolute;top:3px;right:3px;width:16px;height:16px;border-radius:50%;background:#00FF88;transition:all 0.2s;"></div>
-            </div>
-          </div>
         </div>
       </div>
 
-      <!-- Version -->
       <p class="text-center text-xs text-gray-700 pb-2" data-i18n="version">NutriAura v2.0 · Powered by AI</p>
 
-    </div><!-- /tab-profile -->
-
-  </div><!-- /tab-content -->
-
-
-  <!-- ══════════════════════════════════════════════════
-       FLOATING BOTTOM NAVIGATION
-  ═══════════════════════════════════════════════════ -->
-  <div id="bottom-nav">
+    </div></div><div id="bottom-nav">
 
     <button class="nav-btn active" id="nav-home" onclick="switchTab('home')">
       <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -1107,57 +923,46 @@
       <span data-i18n="profile">Profile</span>
     </button>
 
-  </div><!-- /bottom-nav -->
-
-</div><!-- /app -->
-
-
-<script>
+  </div></div><script>
   /* ══════════════════════════════════════════
-     TRANSLATIONS  (UZ / EN / RU)
+     TRANSLATIONS  (UZ / EN / RU) - To'liq va To'g'rilangan
   ══════════════════════════════════════════ */
   const T = {
     uz: {
-      // Greeting
-      goodMorning: 'Xayrli tong',
-      // Calorie section — BUG 2 FIX keys
+      goodMorning: 'Xayrli kun',
       remaining: 'Qolgan',
       caloriesLeft: 'kaloriya qoldi',
       goal: 'Maqsad',
       consumed: "Iste'mol",
       kcal: 'kkal',
-      // Macros
+      of: 'dan',
       macros: 'Makronutrientlar',
       today: 'Bugun',
       protein: 'Oqsil',
       carbs: 'Uglevodlar',
       fat: "Yog'",
-      // Stats widgets
       streak: 'Seriya',
       days: 'kun',
       water: 'Suv',
       steps: 'Qadamlar',
       waterOf: '2.5 L dan',
       stepsOf: '10k dan',
-      // Meals
       todaysMeals: 'Bugungi ovqatlar',
-      addBtn: "+ Qo'sh",
+      addBtn: "+ Qo'shish",
       breakfast: 'Nonushta',
       lunch: 'Tushlik',
       snack: 'Gazak',
       dinner: 'Kechki ovqat',
-      // Scan
       aiScanner: 'AI Skaner',
       scanFood: 'Ovqatni skan qiling',
       pointAtFood: "Ovqatga yo'naltiring",
       camera: 'Kamera',
       gallery: 'Galereya',
-      addToLog: "✦ Bugungi jurnalga qo'sh",
+      addToLog: "✦ Bugungi jurnalga qo'shish",
       addedText: "✓ Qo'shildi!",
       scanLoading: 'Ovqat tahlil qilinmoqda…',
       scanTipsTitle: 'AI Skan Maslahatlari',
       scanTipsText: "Eng yaxshi natija uchun ovqatni tekis yuzaga yaxshi yorug'likda qo'ying. AI 1M+ ovqatni 95%+ aniqlik bilan aniqlaydi.",
-      // History
       analytics: 'Tahlil',
       historyTitle: 'Tarix',
       seeAll: "Hammasini ko'r →",
@@ -1167,7 +972,6 @@
       goalHit: 'maqsad',
       todaysTimeline: 'Bugungi Jadval',
       weekInsights: 'Haftalik Tahlil',
-      // Profile
       tdeeCalc: 'TDEE Kalkulyator',
       name: 'Ism',
       namePlaceholder: 'Ismingiz',
@@ -1199,31 +1003,29 @@
       dailyReminders: 'Kunlik Eslatmalar',
       metricUnits: "Metrik O'lchovlar",
       version: "NutriAura v2.0 · AI bilan",
-      // Goal labels
       weightLoss: "Vazn Yo'qotish",
       maintenance: 'Saqlash',
       muscleGain: "Mushak O'sishi",
       goalPrefix: 'Maqsad: ',
-      // Nav
       home: 'Bosh sahifa',
       historyNav: 'Tarix',
       stats: 'Statistika',
       profile: 'Profil',
-      // Onboarding
       obWelcome: "NutriAura'ga Xush Kelibsiz",
       obChooseLang: 'Tilni tanlang',
       obStep1: 'Ismingiz nima?',
-      obStep2: 'Jins',
+      obStep2: 'Jinsingizni tanlang',
       obStep3: "O'lchamlaringiz",
       obStep4: 'Faollik Darajasi',
       obStep5: 'Maqsadingiz',
       obNext: 'Keyingisi →',
       obBack: '← Orqaga',
       obFinish: '✦ Boshlaylik!',
-      // Day abbreviations for calendar strip
-      days_abbr: ['Yak', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh'],
+      promptName: 'Ovqat nomini kiriting:',
+      promptCal: 'Kaloriya miqdorini kiriting:',
+      noMeals: "Hali ovqat qo'shilmagan. Skanerlang yoki qo'lda kiriting!",
+      days_abbr: ['Yak', 'Du', 'Se', 'Ch', 'Pa', 'Ju', 'Sh']
     },
-
     en: {
       goodMorning: 'Good Morning',
       remaining: 'Remaining',
@@ -1231,6 +1033,7 @@
       goal: 'Goal',
       consumed: 'Consumed',
       kcal: 'kcal',
+      of: 'of',
       macros: 'Macronutrients',
       today: 'Today',
       protein: 'Protein',
@@ -1316,16 +1119,19 @@
       obNext: 'Next →',
       obBack: '← Back',
       obFinish: "✦ Let's Start!",
-      days_abbr: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      promptName: 'Enter meal name:',
+      promptCal: 'Enter calories:',
+      noMeals: "No meals logged yet. Scan food or add manually!",
+      days_abbr: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     },
-
     ru: {
-      goodMorning: 'Доброе утро',
+      goodMorning: 'Добрый день',
       remaining: 'Осталось',
       caloriesLeft: 'калорий осталось',
       goal: 'Цель',
       consumed: 'Потреблено',
       kcal: 'ккал',
+      of: 'из',
       macros: 'Макронутриенты',
       today: 'Сегодня',
       protein: 'Белок',
@@ -1352,7 +1158,7 @@
       addedText: '✓ Добавлено!',
       scanLoading: 'Анализируем еду…',
       scanTipsTitle: 'Советы по сканированию',
-      scanTipsText: 'Для лучших результатов положите еду на ровную поверхность при хорошем освещении. ИИ определяет 1М+ продуктов с точностью 95%+.',
+      scanTipsText: 'Для лучших результатов положите еду на ровную поверхность при хорошем освещении.',
       analytics: 'Аналитика',
       historyTitle: 'История',
       seeAll: 'Смотреть все →',
@@ -1404,86 +1210,95 @@
       obWelcome: 'Добро пожаловать в NutriAura',
       obChooseLang: 'Выберите язык',
       obStep1: 'Как вас зовут?',
-      obStep2: 'Пол',
+      obStep2: 'Ваш Пол',
       obStep3: 'Ваши параметры',
       obStep4: 'Уровень активности',
       obStep5: 'Ваша цель',
       obNext: 'Далее →',
       obBack: '← Назад',
       obFinish: '✦ Начнём!',
-      days_abbr: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      promptName: 'Введите название блюда:',
+      promptCal: 'Введите калории:',
+      noMeals: "Еда еще не добавлена. Отсканируйте или добавьте вручную!",
+      days_abbr: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб']
     }
   };
 
   /* ══════════════════════════════════════════
-     STATE
+     STATE VA LOCALSTORAGE MANTIG'I
   ══════════════════════════════════════════ */
+  const TODAY_KEY = 'cs_day_' + new Date().toISOString().slice(0, 10);
+
   const state = {
     activeTab: 'home',
-    lang: 'en',
+    lang: 'uz',
     obStep: 0,
     gender: 'male',
     activity: 'sedentary',
     goal: 'maintain',
     calorieGoal: 2200,
-    consumed: 1624,   // BUG 2 FIX: tracks actual consumed, no burned
+    consumed: 0,
     tdee: null,
-    streak: 14,
+    streak: 0,
+    lastScanResult: null
   };
 
+  function getTodayData() {
+    try { return JSON.parse(localStorage.getItem(TODAY_KEY)) || { meals: [], water: 0, steps: 0 }; }
+    catch { return { meals: [], water: 0, steps: 0 }; }
+  }
+
+  function setTodayData(d) {
+    localStorage.setItem(TODAY_KEY, JSON.stringify(d));
+  }
+
   /* ══════════════════════════════════════════
-     applyLang  — updates ALL DOM text
+     applyLang  — MATNLARNI YANGILASH
   ══════════════════════════════════════════ */
   function applyLang() {
-    const t = T[state.lang];
-    if (!t) return;
-
+    const t = T[state.lang] || T.uz;
     document.documentElement.lang = state.lang;
 
-    // Update all [data-i18n] elements
     document.querySelectorAll('[data-i18n]').forEach(el => {
       const key = el.dataset.i18n;
       if (t[key] !== undefined) el.textContent = t[key];
     });
 
-    // Update all [data-i18n-ph] placeholder attributes
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       const key = el.dataset.i18nPh;
       if (t[key] !== undefined) el.placeholder = t[key];
     });
 
-    // Add-to-log button (only if not in "added" state)
     const addBtn = document.getElementById('add-to-log-btn');
     if (addBtn && addBtn.dataset.added !== 'true') {
       addBtn.textContent = t.addToLog;
     }
 
-    // Profile goal display
     const t_goalLabels = { cut: t.weightLoss, maintain: t.maintenance, bulk: t.muscleGain };
     const goalEl = document.getElementById('profile-goal-display');
     if (goalEl) goalEl.textContent = t.goalPrefix + (t_goalLabels[state.goal] || t.maintenance);
 
-    // Update lang flag active state in profile
     ['uz', 'en', 'ru'].forEach(l => {
       const btn = document.getElementById('lang-' + l);
       if (btn) btn.classList.toggle('active', l === state.lang);
     });
+
+    updateDashboard(); // Dinamik o'zgaruvchilarni ham tarjima qiladi
   }
 
   /* ══════════════════════════════════════════
-     LANGUAGE SELECTION (onboarding Step 0)
+     LANGUAGE SELECTION (ONBOARDING)
   ══════════════════════════════════════════ */
   function selectLang(lang) {
     state.lang = lang;
     applyLang();
-    obNext(0);  // advance to step 1 after picking language
+    obNext(0); 
   }
 
   function changeLang(lang) {
     state.lang = lang;
     applyLang();
-    buildWeekStrip();   // rebuild with localised day abbreviations
-    // Persist
+    buildWeekStrip();
     try {
       const saved = JSON.parse(localStorage.getItem('cs_prefs') || '{}');
       saved.lang = lang;
@@ -1521,22 +1336,18 @@
   }
 
   function finishOnboarding() {
-    // Copy onboarding inputs to the profile tab inputs
     const name = (document.getElementById('ob-name').value || '').trim() || 'Alex';
     document.getElementById('user-name').value = name;
     document.getElementById('user-age').value    = document.getElementById('ob-age').value    || '25';
     document.getElementById('user-height').value = document.getElementById('ob-height').value || '175';
     document.getElementById('user-weight').value = document.getElementById('ob-weight').value || '75';
 
-    // Sync gender/activity/goal seg controls in main profile to match onboarding choices
     syncSegControl('gender-control',   state.gender);
     syncSegControl('activity-control', state.activity);
     syncSegControl('goal-control',     state.goal);
 
-    // Calculate TDEE from provided data
     calculateTDEE();
 
-    // Save preferences to localStorage
     try {
       const prefs = {
         lang:     state.lang,
@@ -1551,14 +1362,10 @@
       localStorage.setItem('cs_prefs', JSON.stringify(prefs));
     } catch(e) {}
 
-    // Hide onboarding, show app
     document.getElementById('onboarding').style.display = 'none';
-
-    // Apply calculated TDEE to home tab and navigate there
     applyTDEE();
   }
 
-  // Helper: set a seg-control's active button by value
   function syncSegControl(controlId, value) {
     const ctrl = document.getElementById(controlId);
     if (!ctrl) return;
@@ -1587,14 +1394,10 @@
         : '0 0 0 6px rgba(0,255,136,0.1), 0 0 28px rgba(0,255,136,0.5)';
   }
 
-  /* ══════════════════════════════════════════
-     SEGMENTED CONTROL
-  ══════════════════════════════════════════ */
   function setSeg(controlId, btn, value) {
     const ctrl = document.getElementById(controlId);
     ctrl.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    // Map both onboarding and main-profile controls to state
     if (controlId === 'gender-control'   || controlId === 'ob-gender-control')   state.gender   = value;
     if (controlId === 'activity-control' || controlId === 'ob-activity-control') state.activity = value;
     if (controlId === 'goal-control'     || controlId === 'ob-goal-control')     state.goal     = value;
@@ -1609,7 +1412,6 @@
     const weight = parseFloat(document.getElementById('user-weight').value) || 75;
     const name   = (document.getElementById('user-name').value || 'Alex').trim();
 
-    // Mifflin-St Jeor BMR
     let bmr = state.gender === 'male'
       ? 10 * weight + 6.25 * height - 5 * age + 5
       : 10 * weight + 6.25 * height - 5 * age - 161;
@@ -1623,7 +1425,6 @@
     state.tdee       = tdee;
     state.calorieGoal = tdee;
 
-    // Macros (30 / 40 / 30 split)
     const protein = Math.round((tdee * 0.30) / 4);
     const carbs   = Math.round((tdee * 0.40) / 4);
     const fat     = Math.round((tdee * 0.30) / 9);
@@ -1637,122 +1438,212 @@
     resultCard.style.display = 'block';
     resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
-    // Update profile display
-    const t = T[state.lang];
+    const t = T[state.lang] || T.uz;
     const t_goalLabels = { cut: t.weightLoss, maintain: t.maintenance, bulk: t.muscleGain };
     document.getElementById('profile-name-display').textContent = name;
     document.getElementById('profile-goal-display').textContent = t.goalPrefix + (t_goalLabels[state.goal] || t.maintenance);
-
-    // Update home username
     document.getElementById('home-username').textContent = name + ' 👋';
   }
 
-  /* ══════════════════════════════════════════
-     BUG 2 FIX: applyTDEE
-     Remaining = Math.max(0, goal - consumed)
-     No burned calories anywhere.
-  ══════════════════════════════════════════ */
   function applyTDEE() {
     if (!state.calorieGoal) return;
+    updateDashboard();
+    switchTab('home');
+  }
 
+  /* ══════════════════════════════════════════
+     UPDATE DASHBOARD (DINAMIK MA'LUMOTLAR)
+  ══════════════════════════════════════════ */
+  function updateDashboard() {
+    const todayData = getTodayData();
+    state.consumed = todayData.meals.reduce((sum, m) => sum + m.cal, 0);
     const remaining = Math.max(0, state.calorieGoal - state.consumed);
 
     document.getElementById('calories-remaining').textContent      = remaining.toLocaleString();
     document.getElementById('calories-goal').textContent           = state.calorieGoal.toLocaleString();
     document.getElementById('calories-consumed-badge').textContent = state.consumed.toLocaleString();
     document.getElementById('calories-consumed').textContent       = state.consumed.toLocaleString();
-    document.getElementById('ring-of-goal').textContent            = 'of ' + state.calorieGoal.toLocaleString();
+    
+    const t = T[state.lang] || T.uz;
+    const ofText = t.of || 'dan';
+    document.getElementById('ring-of-goal').textContent = ofText + ' ' + state.calorieGoal.toLocaleString();
 
-    // Update calorie ring
+    // Doira animatsiyasi
     const circumference = 2 * Math.PI * 88;
     const progress = Math.min(state.consumed / state.calorieGoal, 1);
     const offset   = circumference * (1 - progress);
-    document.getElementById('calorie-ring-circle').setAttribute('stroke-dashoffset', offset.toFixed(1));
+    const ring = document.getElementById('calorie-ring-circle');
+    if (ring) {
+        ring.style.strokeDashoffset = offset.toFixed(1);
+    }
 
-    switchTab('home');
+    // Makrolarni yangilash
+    const proteinGoal = Math.round((state.calorieGoal * 0.30) / 4);
+    const carbsGoal   = Math.round((state.calorieGoal * 0.40) / 4);
+    const fatGoal     = Math.round((state.calorieGoal * 0.30) / 9);
+
+    let pCount = 0, cCount = 0, fCount = 0;
+    todayData.meals.forEach(m => {
+        pCount += parseInt(m.protein) || 0;
+        cCount += parseInt(m.carbs) || 0;
+        fCount += parseInt(m.fat) || 0;
+    });
+
+    document.getElementById('protein-g').textContent = pCount;
+    document.getElementById('carbs-g').textContent = cCount;
+    document.getElementById('fat-g').textContent = fCount;
+
+    document.getElementById('protein-goal').textContent = '/ ' + proteinGoal + 'g';
+    document.getElementById('carbs-goal').textContent = '/ ' + carbsGoal + 'g';
+    document.getElementById('fat-goal').textContent = '/ ' + fatGoal + 'g';
+
+    document.getElementById('protein-bar').style.width = Math.min((pCount/proteinGoal)*100, 100) + '%';
+    document.getElementById('carbs-bar').style.width = Math.min((cCount/carbsGoal)*100, 100) + '%';
+    document.getElementById('fat-bar').style.width = Math.min((fCount/fatGoal)*100, 100) + '%';
+
+    renderMeals(todayData.meals);
+  }
+
+  function renderMeals(meals) {
+    const list = document.getElementById('meals-list');
+    const t = T[state.lang] || T.uz;
+
+    if (!meals || meals.length === 0) {
+      list.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">${t.noMeals}</p>`;
+      return;
+    }
+    const mealIcons = ['🥣','🥗','🍫','🍝','🍱'];
+    const mealColors = ['rgba(0,255,136,0.1)','rgba(59,130,246,0.1)','rgba(245,158,11,0.1)','rgba(249,115,22,0.1)','rgba(168,85,247,0.1)'];
+    
+    list.innerHTML = meals.map((m, i) => `
+      <div class="flex items-center gap-3">
+        <div class="meal-icon" style="background:${mealColors[i%5]};">${mealIcons[i%5]}</div>
+        <div class="flex-1">
+          <p class="text-sm font-medium">${m.name}</p>
+          <p class="text-xs text-gray-500">${m.time}</p>
+        </div>
+        <span class="text-sm font-semibold">${m.cal} <span data-i18n="kcal">${t.kcal}</span></span>
+      </div>
+    `).join('<div style="height:1px;background:rgba(255,255,255,0.04);margin:8px 0;"></div>');
+  }
+
+  function manualAddMeal() {
+    const t = T[state.lang] || T.uz;
+    const name = prompt(t.promptName || "Ovqat nomini kiriting:");
+    if(!name) return;
+    const cal = prompt(t.promptCal || "Kaloriya miqdorini kiriting:");
+    if(!cal || isNaN(cal)) return;
+
+    const today = getTodayData();
+    today.meals.push({
+      name: name,
+      cal: parseInt(cal),
+      protein: 0, carbs: 0, fat: 0,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    });
+    setTodayData(today);
+    updateDashboard();
   }
 
   /* ══════════════════════════════════════════
-     BUG 1 FIX: SCAN HANDLER — FormData, real API
-     Invisible file inputs preserved exactly.
+     SCAN HANDLER
   ══════════════════════════════════════════ */
   async function handleScan(input) {
     if (!input.files || !input.files[0]) return;
     const file = input.files[0];
 
-    // Loading state
     const vf = document.getElementById('scan-viewfinder');
     vf.style.border = '2px solid rgba(0,255,136,0.5)';
     document.getElementById('scan-result').style.display = 'none';
     document.getElementById('scan-loading').style.display = 'block';
 
     try {
-      // BUG 1 FIX: use multipart/form-data, not base64 JSON
       const formData = new FormData();
       formData.append('file', file);
 
       const response = await fetch('https://calories-production.up.railway.app/analyze-food', {
         method: 'POST',
         body: formData
-        // NOTE: Do NOT set Content-Type header — browser sets it automatically
-        // with the correct multipart boundary when using FormData
       });
 
       if (!response.ok) throw new Error('API error ' + response.status);
-
       const data = await response.json();
 
-      // Populate result card — handle common API response field names
-      document.getElementById('scan-food-name').textContent    = data.name        || data.food_name   || data.label    || 'Unknown Food';
-      document.getElementById('scan-food-portion').textContent = data.portion     || data.serving     || '1 serving';
-      document.getElementById('scan-calories').textContent     = Math.round(data.calories || data.kcal || 0);
-      document.getElementById('scan-protein').textContent      = (Math.round(data.protein      || data.proteins      || 0)) + 'g';
-      document.getElementById('scan-carbs').textContent        = (Math.round(data.carbs        || data.carbohydrates || 0)) + 'g';
-      document.getElementById('scan-fat').textContent          = (Math.round(data.fat          || data.fats          || 0)) + 'g';
+      const nameText = data.name || data.food_name || data.label || 'Unknown Food';
+      const calText  = Math.round(data.calories || data.kcal || 0);
+      const protText = Math.round(data.protein || data.proteins || 0);
+      const carbText = Math.round(data.carbs || data.carbohydrates || 0);
+      const fatText  = Math.round(data.fat || data.fats || 0);
 
-      // Refresh add-to-log button text with current language
+      document.getElementById('scan-food-name').textContent    = nameText;
+      document.getElementById('scan-food-portion').textContent = data.portion || data.serving || '1 serving';
+      document.getElementById('scan-calories').textContent     = calText;
+      document.getElementById('scan-protein').textContent      = protText + 'g';
+      document.getElementById('scan-carbs').textContent        = carbText + 'g';
+      document.getElementById('scan-fat').textContent          = fatText + 'g';
+
+      state.lastScanResult = {
+         name: nameText,
+         cal: calText,
+         protein: protText,
+         carbs: carbText,
+         fat: fatText
+      };
+
+      const t = T[state.lang] || T.uz;
       const addBtn = document.getElementById('add-to-log-btn');
-      if (addBtn) { addBtn.textContent = T[state.lang].addToLog; addBtn.dataset.added = 'false'; }
+      if (addBtn) { addBtn.textContent = t.addToLog; addBtn.dataset.added = 'false'; }
 
       document.getElementById('scan-result').style.display = 'block';
 
     } catch (err) {
       console.error('Scan API error:', err);
-      // Show user-friendly error without crashing the UI
       const t = T[state.lang];
-      alert(t ? (t.scanTipsTitle + ' — error. Please try again.') : 'Could not analyze food. Please try again.');
+      alert(t ? (t.scanTipsTitle + ' — Xatolik yuz berdi.') : 'Could not analyze food.');
     } finally {
       vf.style.border = '';
       document.getElementById('scan-loading').style.display = 'none';
-      // Reset input so the same file can be picked again
       input.value = '';
     }
   }
 
   /* ══════════════════════════════════════════
-     ADD TO LOG
+     ADD TO LOG BUTTON (SKANERLANGANNI QO'SHISH)
   ══════════════════════════════════════════ */
   document.addEventListener('DOMContentLoaded', () => {
     const addBtn = document.getElementById('add-to-log-btn');
     if (addBtn) {
       addBtn.addEventListener('click', () => {
-        const t = T[state.lang];
-        addBtn.textContent = t ? t.addedText : '✓ Added!';
+        if(!state.lastScanResult) return;
+
+        const today = getTodayData();
+        today.meals.push({
+          name: state.lastScanResult.name,
+          cal: state.lastScanResult.cal,
+          protein: state.lastScanResult.protein,
+          carbs: state.lastScanResult.carbs,
+          fat: state.lastScanResult.fat,
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        });
+        setTodayData(today);
+        updateDashboard();
+
+        const t = T[state.lang] || T.uz;
+        addBtn.textContent = t.addedText;
         addBtn.dataset.added = 'true';
         addBtn.style.background = 'linear-gradient(135deg,rgba(0,255,136,0.25),rgba(16,185,129,0.15))';
+        
         setTimeout(() => {
           addBtn.dataset.added = 'false';
-          addBtn.textContent = t ? t.addToLog : "✦ Add to Today's Log";
+          addBtn.textContent = t.addToLog;
           addBtn.style.background = '';
           document.getElementById('scan-result').style.display = 'none';
-        }, 2000);
+          state.lastScanResult = null;
+        }, 1500);
       });
     }
   });
 
-  /* ══════════════════════════════════════════
-     TOGGLE SWITCH
-  ══════════════════════════════════════════ */
   function toggleSwitch(el) {
     const track = el.tagName === 'DIV' ? el : el.querySelector('div');
     const thumb = track.querySelector('div');
@@ -1773,17 +1664,12 @@
     }
   }
 
-  /* ══════════════════════════════════════════
-     WEEK CALENDAR STRIP (i18n day names)
-  ══════════════════════════════════════════ */
   function buildWeekStrip() {
     const strip = document.getElementById('week-strip');
     if (!strip) return;
     strip.innerHTML = '';
-
-    const days  = T[state.lang].days_abbr || T.en.days_abbr;
+    const days  = (T[state.lang] || T.uz).days_abbr;
     const today = new Date();
-
     for (let i = 13; i >= 0; i--) {
       const d = new Date(today);
       d.setDate(today.getDate() - i);
@@ -1805,51 +1691,40 @@
   }
 
   /* ══════════════════════════════════════════
-     INIT
+     INIT (DASTURNI YURGIZISH)
   ══════════════════════════════════════════ */
   (function init() {
-    // Attempt to restore saved preferences
     try {
       const saved = JSON.parse(localStorage.getItem('cs_prefs') || 'null');
-      if (saved && saved.lang && T[saved.lang]) {
+      if (saved && saved.lang) {
         state.lang     = saved.lang;
         state.gender   = saved.gender   || 'male';
         state.activity = saved.activity || 'sedentary';
         state.goal     = saved.goal     || 'maintain';
 
-        // Restore profile inputs
         if (saved.name)   document.getElementById('user-name').value   = saved.name;
         if (saved.age)    document.getElementById('user-age').value    = saved.age;
         if (saved.height) document.getElementById('user-height').value = saved.height;
         if (saved.weight) document.getElementById('user-weight').value = saved.weight;
 
-        // Sync seg controls
         syncSegControl('gender-control',   state.gender);
         syncSegControl('activity-control', state.activity);
         syncSegControl('goal-control',     state.goal);
 
-        // Apply language before hiding onboarding
+        calculateTDEE();
         applyLang();
-
-        // Update username on home
-        if (saved.name) document.getElementById('home-username').textContent = saved.name + ' 👋';
-
-        // Hide onboarding — user has already set up
+        
         document.getElementById('onboarding').style.display = 'none';
+      } else {
+          // Birinchi marta kirish
+          applyLang();
       }
     } catch (e) {
-      // Onboarding remains visible for first-time users
+        applyLang();
     }
 
     buildWeekStrip();
-
-    // Animate calorie ring on load
-    setTimeout(() => {
-      const circ = 2 * Math.PI * 88;
-      const pct  = Math.min(state.consumed / state.calorieGoal, 1);
-      document.getElementById('calorie-ring-circle').setAttribute('stroke-dasharray', circ.toFixed(1));
-      document.getElementById('calorie-ring-circle').setAttribute('stroke-dashoffset', (circ * (1 - pct)).toFixed(1));
-    }, 100);
+    setTimeout(() => { updateDashboard(); }, 100);
   })();
 </script>
 
