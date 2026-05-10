@@ -14,7 +14,7 @@
 
   <script>
     tailwind.config = {
-      darkMode: 'class', // Qorong'i rejimni yoqamiz
+      darkMode: 'class', 
       theme: {
         extend: {
           colors: { mint: { 50:'#f0fdf8',100:'#ccfbef',200:'#99f6e0',300:'#5eead4',400:'#2dd4bf',500:'#10b981',600:'#059669',700:'#047857' } },
@@ -30,7 +30,6 @@
     *{font-family:'Poppins',sans-serif;}
     body{transition: background-color 0.3s, color 0.3s;}
     
-    /* Dark Mode Global Overrides */
     .dark body { background: #111827 !important; color: #f9fafb !important; }
     .dark header { background: rgba(17, 24, 39, 0.9) !important; border-bottom-color: #374151 !important; }
     .dark .bottom-nav { background: rgba(17, 24, 39, 0.95) !important; border-top-color: #374151 !important; }
@@ -40,20 +39,16 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .dark .scan-area { border-color: #374151 !important; }
-    
     .dark .field-input { background: #374151 !important; border-color: #4b5563; color: #f9fafb !important; }
     .dark .field-input:focus { border-color: #10b981; background: #4b5563 !important; }
-    
     .dark .lang-btn { background: #374151; border-color: #4b5563; color: #d1d5db; }
     .dark .lang-btn.active { background: #10b981; border-color: #10b981; color: #fff; }
-    
     .dark .bg-gray-100 { background-color: #374151 !important; }
     .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.15) !important; }
     .dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; }
     .dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.15) !important; }
     .dark .border-mint-50 { border-color: rgba(16, 185, 129, 0.2) !important; }
     
-    /* Animations & Others */
     .spinner{animation:spin .9s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .pulse-ring::after{content:'';position:absolute;inset:-6px;border-radius:9999px;border:2px solid #10b981;animation:pulse-ring 2s ease-out infinite;}
@@ -61,10 +56,10 @@
     @keyframes slideUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
     .slide-up{animation:slideUp .45s cubic-bezier(.22,1,.36,1) both;}
     @keyframes toastIn{from{opacity:0;transform:translate(-50%,16px);}to{opacity:1;transform:translate(-50%,0);}}
+    
     .progress-fill{transition:width .8s cubic-bezier(.22,1,.36,1);}
-    .scan-area{transition:box-shadow .2s,transform .2s;display:flex;-webkit-tap-highlight-color:transparent;}
+    .scan-area{transition:box-shadow .2s,transform .2s;}
     .scan-area:hover{box-shadow:0 0 32px rgba(16,185,129,.18);transform:scale(1.01);}
-    .scan-area:active{transform:scale(.98);}
     .count-num{font-variant-numeric:tabular-nums;}
     .gender-btn{transition:all .2s;border-radius:12px;padding:10px 0;font-size:14px;font-weight:600;color:#6b7280;}
     .dark .gender-btn { color: #9ca3af; }
@@ -74,12 +69,13 @@
     
     #errorToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
     #successToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
+    
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;backdrop-filter:blur(12px);border-top:1px solid #f0fdf4;padding-bottom:env(safe-area-inset-bottom,0px);}
     .nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0 6px;flex:1;color:#9ca3af;font-size:10px;font-weight:600;transition:color .2s;cursor:pointer;border:none;background:none;}
     .nav-btn.active{color:#10b981;}
     .nav-btn svg{transition:transform .2s;}
     .nav-btn.active svg{transform:scale(1.1);}
-    .nav-fab{width:52px;height:52px;border-radius:9999px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,box-shadow .15s;margin-top:-10px;position:relative;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+    .nav-fab{width:52px;height:52px;border-radius:9999px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .15s;margin-top:-10px;position:relative;flex-shrink:0;}
     .nav-fab:active{transform:scale(.93);box-shadow:0 2px 8px rgba(16,185,129,.3);}
     .tab-panel{display:none;}
     .tab-panel.active{display:block;animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;}
@@ -87,7 +83,6 @@
     .lang-btn.active{background:#10b981;border-color:#10b981;color:#fff;}
     .settings-section{border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
     .settings-section-title{font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
-    
     .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
     .ring-wrap svg{transform:rotate(-90deg);}
     .ring-track{fill:none;stroke-linecap:round;}
@@ -98,8 +93,6 @@
     .bmi-needle{position:absolute;top:-4px;width:4px;height:18px;background:#1f2937;border-radius:2px;transform:translateX(-50%);transition:left 1s cubic-bezier(.22,1,.36,1);}
     .dark .bmi-needle { background: #f9fafb; }
     .stat-card{border-radius:20px;padding:16px 18px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
-
-
   </style>
 </head>
 <body class="min-h-screen bg-[#F9FAFB] text-gray-800" style="padding-bottom:80px">
@@ -173,34 +166,39 @@
     </div>
   </div>
 
-  <div class="relative flex justify-center">
-    <!-- Ikkala yashirin input — iOS uchun to'g'ri texnika -->
-    <input type="file" id="fileInputCamera"  accept="image/*"             capture="environment" onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
-    <input type="file" id="fileInputGallery" accept="image/jpeg,image/png"                     onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
-
-    <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-10 bg-white">
+  <div class="relative flex justify-center w-full">
+    <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-8 bg-white dark:border-gray-600 dark:bg-gray-800">
+      
       <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center shadow-glow">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
         </svg>
       </div>
+      
       <div class="text-center">
         <p id="txtScanTitle" class="text-base font-700 text-gray-800 dark:text-white">Taomni yuklang</p>
         <p id="txtScanSub" class="text-xs text-gray-400 mt-0.5">Kamera yoki Galereyadan tanlang</p>
       </div>
-      <!-- Ikki alohida tugma -->
-      <div class="flex gap-3 w-full px-4">
-        <label for="fileInputCamera" class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3 font-600 text-sm cursor-pointer shadow-card active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <span id="txtCameraBtn">Kamera</span>
-        </label>
-        <label for="fileInputGallery" class="flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 rounded-2xl py-3 font-600 text-sm cursor-pointer active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span id="txtGalleryBtn">Galereya</span>
-        </label>
+
+      <div class="flex gap-3 w-full px-4 mt-2">
+        <div class="relative flex-1 bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3 flex items-center justify-center shadow-card hover:opacity-90 active:scale-95 transition-all">
+          <input type="file" accept="image/*" capture="environment" onchange="handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer;" />
+          <div class="flex items-center justify-center gap-2 pointer-events-none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span id="txtCameraBtn" class="font-600 text-sm">Kamera</span>
+          </div>
+        </div>
+        <div class="relative flex-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 rounded-2xl py-3 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all">
+          <input type="file" accept="image/jpeg, image/png" onchange="handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer;" />
+          <div class="flex items-center justify-center gap-2 pointer-events-none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span id="txtGalleryBtn" class="font-600 text-sm">Galereya</span>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="loadingState" class="hidden w-full rounded-3xl shadow-soft border-2 border-mint-100 flex flex-col items-center justify-center gap-3 py-12 bg-white">
+    
+    <div id="loadingState" class="hidden absolute inset-0 z-50 w-full rounded-3xl shadow-soft border-2 border-mint-100 flex flex-col items-center justify-center gap-3 bg-white dark:bg-gray-800 dark:border-gray-600">
       <div class="relative w-16 h-16">
         <svg class="spinner w-16 h-16 text-mint-500" viewBox="0 0 50 50" fill="none">
           <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="60"/>
@@ -208,7 +206,6 @@
         <div class="absolute inset-0 flex items-center justify-center"><div class="w-5 h-5 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div></div>
       </div>
       <p id="txtAnalyzing" class="text-sm font-600 text-gray-600 dark:text-gray-300">Taom tahlil qilinmoqda…</p>
-      <p id="txtWait" class="text-xs text-gray-400">Bir lahza kuting</p>
     </div>
   </div>
 
@@ -363,10 +360,14 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span id="navTxtHome">Bosh</span>
     </button>
-    <label class="nav-fab" for="fileInputNavCam" onclick="if(activeTab!=='home')switchTab('home')" aria-label="Kamerani ochish">
-      <input type="file" id="fileInputNavCam" accept="image/*" capture="environment" onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-    </label>
+    
+    <div class="relative flex items-center justify-center" style="width: 52px; height: 52px; margin-top: -10px; flex-shrink: 0;">
+      <input type="file" accept="image/*" capture="environment" onchange="if(activeTab!=='home')switchTab('home'); handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer; border-radius:50%;" />
+      <div class="nav-fab w-full h-full m-0 pointer-events-none">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+    </div>
+
     <button class="nav-btn" id="nav-analytics" onclick="switchTab('analytics')">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       <span id="navTxtAnalytics">Tahlil</span>
@@ -398,7 +399,7 @@
 
 <script>
 // ============================================================
-// TARJIMA JADVALI (Tungi rejim so'zlari qo'shildi)
+// TARJIMA JADVALI
 // ============================================================
 const T = {
   uz:{
@@ -496,9 +497,6 @@ try {
   if (u && u.lang && T[u.lang]) activeLang = u.lang;
 } catch(e) {}
 
-// ============================================================
-// THEME (MAVZU) BOSHQARUVI
-// ============================================================
 let currentTheme = localStorage.getItem('cs_theme') || 'auto';
 
 function setThemeMode(mode) {
@@ -519,7 +517,6 @@ function applyThemeStyles() {
   } else if (currentTheme === 'light') {
     isDark = false;
   } else {
-    // Avto rejim - Telegram sozlamasini o'qish
     if (tg && tg.colorScheme) {
       isDark = tg.colorScheme === 'dark';
     } else {
@@ -527,20 +524,17 @@ function applyThemeStyles() {
     }
   }
 
-  // Tailwind 'dark' klasini html tegiga qo'shish yoki olib tashlash
   if (isDark) {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
 
-  // Telegram Header va Background ranglarini moslash
   if (tg) {
     try { tg.setHeaderColor(isDark ? '#111827' : '#ffffff'); } catch(e) {}
     try { tg.setBackgroundColor(isDark ? '#111827' : '#F9FAFB'); } catch(e) {}
   }
 
-  // Agar Tahlil (Analytics) oynasida bo'lsak, grafiklarni yangilaymiz
   if (activeTab === 'analytics') {
     renderAnalytics();
   }
@@ -550,413 +544,16 @@ const tg = window.Telegram?.WebApp;
 if (tg) {
   tg.ready();
   tg.expand();
-  // Telegram mavzusi o'zgarganda avtomat eshitish
   tg.onEvent('themeChanged', () => {
     if (currentTheme === 'auto') applyThemeStyles();
   });
 }
 
-
 async function handleFileChange(e) {
-  // Faylni darhol (sync) ushlash — async kutishdan oldin
   const file = e.target.files && e.target.files[0];
-  e.target.value = ''; // Darhol reset: qayta tanlash imkonini beradi
+  e.target.value = ''; // Darhol tozalash
 
   if (!file) return;
 
   if (tg && tg.HapticFeedback) {
-    try { tg.HapticFeedback.impactOccurred('light'); } catch(err) {}
-  }
-
-  showLoading();
-
-  const formData = new FormData();
-  formData.append('file', file);
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      body: formData
-    });
-
-    if (!res.ok) {
-      let detail = '';
-      try { detail = (await res.json()).detail || ''; } catch { detail = await res.text().catch(() => ''); }
-      throw new Error(detail || T[activeLang].unknownErr);
-    }
-
-    const data = await res.json();
-    currentResult = data;
-
-    if (tg && tg.HapticFeedback) {
-      try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
-    }
-
-    showResult(data);
-
-  } catch(err) {
-    showScan();
-    showError(err.message);
-
-    if (tg && tg.HapticFeedback) {
-      try { tg.HapticFeedback.notificationOccurred('error'); } catch(err2) {}
-    }
-  }
-}
-
-function showLoading() {
-  document.getElementById('scanBtn').classList.add('hidden');
-  document.getElementById('loadingState').classList.remove('hidden');
-  document.getElementById('resultCard').classList.add('hidden');
-}
-
-function showScan() {
-  document.getElementById('scanBtn').classList.remove('hidden');
-  document.getElementById('loadingState').classList.add('hidden');
-  document.getElementById('resultCard').classList.add('hidden');
-}
-
-function showResult(data) {
-  document.getElementById('scanBtn').classList.add('hidden');
-  document.getElementById('loadingState').classList.add('hidden');
-  document.getElementById('resultCard').classList.remove('hidden');
-  document.getElementById('foodName').textContent = data.food_name;
-  animateCount(document.getElementById('calorieNum'), data.calories, '', 900);
-  setTimeout(() => {
-    animateCount(document.getElementById('proteinNum'), data.protein, 'g', 700);
-    animateCount(document.getElementById('fatNum'),    data.fat,     'g', 700);
-    animateCount(document.getElementById('carbsNum'),  data.carbs,   'g', 700);
-  }, 300);
-}
-
-function extractCleanMessage(raw) {
-  try { const p = JSON.parse(raw); if (p.detail) return p.detail; } catch {}
-  return raw.replace(/^(Error:|HTTPException:|Detail:|detail:)\s*/i, '').replace(/^\d{3}\s*[-:]?\s*/, '').trim();
-}
-
-function showError(msg) {
-  const cleaned = extractCleanMessage(String(msg));
-  document.getElementById('errorText').textContent = cleaned;
-  const toast = document.getElementById('errorToast');
-  toast.classList.remove('hidden');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.add('hidden'), 4000);
-}
-
-function showSuccess(msg) {
-  document.getElementById('successText').textContent = msg;
-  const toast = document.getElementById('successToast');
-  toast.classList.remove('hidden');
-  clearTimeout(successTimer);
-  successTimer = setTimeout(() => toast.classList.add('hidden'), 3500);
-}
-
-document.getElementById('addLogBtn').addEventListener('click', () => {
-  if (!currentResult) return;
-  const log = loadLog();
-  log.kcal    += currentResult.calories;
-  log.protein += currentResult.protein;
-  log.fat     += currentResult.fat;
-  log.carbs   += currentResult.carbs;
-  saveLog(log);
-  updateDashboard();
-  currentResult = null;
-  if (tg && tg.HapticFeedback) {
-    try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
-  }
-  showScan();
-});
-
-document.getElementById('rescanBtn').addEventListener('click', () => {
-  currentResult = null;
-  showScan();
-});
-
-function loadProfileIntoSettings() {
-  try {
-    const p = loadProfile();
-    if (p) {
-      setGender(p.gender || 'male', false);
-      document.getElementById('fieldAge').value      = p.age      || '';
-      document.getElementById('fieldHeight').value   = p.height   || '';
-      document.getElementById('fieldWeight').value   = p.weight   || '';
-      document.getElementById('fieldActivity').value = p.activity || '1.55';
-      document.getElementById('fieldGoal').value     = p.goal     || 'maintain';
-      if (p.tdee) showTDEEPreview(p.tdee);
-    } else {
-      setGender('male', false);
-      ['fieldAge','fieldHeight','fieldWeight'].forEach(id => document.getElementById(id).value = '');
-      document.getElementById('fieldActivity').value = '1.55';
-      document.getElementById('fieldGoal').value     = 'maintain';
-      document.getElementById('tdeePreview').classList.add('hidden');
-    }
-  } catch(e) { console.error(e); }
-}
-
-function setGender(g, preview) {
-  selectedGender = g;
-  document.getElementById('genderM').classList.toggle('active', g === 'male');
-  document.getElementById('genderF').classList.toggle('active', g === 'female');
-  if (preview !== false) livePreview();
-}
-
-function livePreview() {
-  const age      = parseInt(document.getElementById('fieldAge').value);
-  const height   = parseInt(document.getElementById('fieldHeight').value);
-  const weight   = parseInt(document.getElementById('fieldWeight').value);
-  const activity = parseFloat(document.getElementById('fieldActivity').value) || 1.55;
-  const goal     = document.getElementById('fieldGoal').value;
-  if (age && height && weight) showTDEEPreview(calcTDEE(selectedGender, age, height, weight, activity, goal));
-}
-
-function showTDEEPreview(tdee) {
-  document.getElementById('tdeePreview').classList.remove('hidden');
-  document.getElementById('tdeeValue').textContent = tdee;
-}
-
-async function saveProfile() {
-  const age      = parseInt(document.getElementById('fieldAge').value);
-  const height   = parseInt(document.getElementById('fieldHeight').value);
-  const weight   = parseInt(document.getElementById('fieldWeight').value);
-  const activity = parseFloat(document.getElementById('fieldActivity').value) || 1.55;
-  const goal     = document.getElementById('fieldGoal').value;
-
-  if (!age || !height || !weight) { showError(T[activeLang].fillAll); return; }
-
-  const tdee = calcTDEE(selectedGender, age, height, weight, activity, goal);
-  persistProfile({ gender: selectedGender, age, height, weight, activity, goal, tdee });
-
-  const tgUser    = tg?.initDataUnsafe?.user;
-  const telegram_id = tgUser ? tgUser.id : 123456789;
-
-  const payload = { telegram_id, gender: selectedGender, age, height, weight, activity_level: activity, goal, tdee };
-
-  try {
-    const saveUrl = API_URL.replace('/analyze-food', '/save-profile');
-    fetch(saveUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    }).catch(e => console.log('DB bilan ulanishda xato'));
-  } catch(e) { console.error(e); }
-
-  document.getElementById('profileDot').classList.remove('hidden');
-  if (tg && tg.HapticFeedback) {
-    try { tg.HapticFeedback.notificationOccurred('success'); } catch(err) {}
-  }
-  updateDashboard();
-  showSuccess(T[activeLang].savedOk);
-}
-
-function switchTab(name) {
-  try {
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-    const panel  = document.getElementById('tab-' + name);
-    const navBtn = document.getElementById('nav-' + name);
-    if (!panel) return;
-    panel.classList.add('active');
-    if (navBtn) navBtn.classList.add('active');
-    activeTab = name;
-    if (name === 'settings')  loadProfileIntoSettings();
-    if (name === 'analytics') setTimeout(() => renderAnalytics(), 50);
-  } catch(e) { console.error(e); }
-}
-
-function switchLang(lang) {
-  if (!T[lang]) return;
-  activeLang = lang;
-  try {
-    const u = JSON.parse(localStorage.getItem('cs_user')) || {};
-    u.lang = lang;
-    localStorage.setItem('cs_user', JSON.stringify(u));
-  } catch(e) {}
-  applyLang();
-  if (activeTab === 'analytics') setTimeout(() => renderAnalytics(), 50);
-}
-
-function applyLang() {
-  const t = T[activeLang] || T.uz;
-  const s = (id, txt) => { const e = document.getElementById(id); if (e) e.textContent = txt; };
-  s('txtDailyGoal', t.dailyGoal); s('txtRemain', t.remain); s('txtProteinLbl', t.protein);
-  s('txtFatLbl', t.fat); s('txtCarbsLbl', t.carbs); s('txtScanTitle', t.scanTitle);
-  s('txtScanSub', t.scanSub); s('txtCameraBtn', t.cameraBtn); s('txtGalleryBtn', t.galleryBtn); s('txtAnalyzing', t.analyzing); s('txtWait', t.wait);
-  s('txtResultLabel', t.resultLabel); s('txtResProtein', t.protein); s('txtResFat', t.fat);
-  s('txtResCarbs', t.carbs); s('addLogBtn', t.addLog); s('rescanBtn', t.rescan);
-  s('txtProfileTitle', t.profileTitle); s('txtTDEESub', t.tdeeSub);
-  
-  // Theme strings
-  s('txtThemeTitle', t.themeTitle);
-  document.getElementById('themeLight').innerHTML = t.themeLight;
-  document.getElementById('themeDark').innerHTML = t.themeDark;
-  document.getElementById('themeAuto').innerHTML = t.themeAuto;
-  
-  s('txtGenderLabel', t.genderLabel); s('genderM', t.male); s('genderF', t.female);
-  s('txtAgeLbl', t.ageLbl); s('txtHeightLbl', t.heightLbl); s('txtWeightLbl', t.weightLbl);
-  s('txtActivityLbl', t.activityLbl);
-  s('optSedentary', t.optSedentary); s('optLight', t.optLight);
-  s('optModerate', t.optModerate); s('optVeryActive', t.optVeryActive);
-  s('txtGoalLbl', t.goalLbl); s('optLose', t.optLose);
-  s('optMaintain', t.optMaintain); s('optGain', t.optGain);
-  s('txtTDEELabel', t.tdeeLabel); s('txtKcalDay', t.kcalDay); s('txtSaveBtn', t.saveBtn);
-  s('navTxtHome', t.navHome); s('navTxtAnalytics', t.navAnalytics); s('navTxtSettings', t.navSettings);
-  s('txtCurrWeight', t.currWeight); s('txtTargetWeight', t.targetWeight); s('txtFromProfile', t.fromProfile);
-  s('txtBMILabel', t.bmiLabel); s('txtUnderweight', t.underweight); s('txtHealthy', t.healthy);
-  s('txtOverweight', t.overweight); s('txtObese', t.obese);
-  s('txtWeightChart', t.weightChart); s('txtCalChart', t.calChart);
-
-  const ph = (id, txt) => { const e = document.getElementById(id); if (e) e.placeholder = txt; };
-  ph('fieldAge', t.agePlaceholder); ph('fieldHeight', t.heightPlaceholder); ph('fieldWeight', t.weightPlaceholder);
-
-  ['uz','en','ru'].forEach(l => {
-    const b = document.getElementById('lang' + l.charAt(0).toUpperCase() + l.slice(1));
-    if (b) b.classList.toggle('active', l === activeLang);
-  });
-}
-
-function calcTDEE(gender, age, height, weight, activity, goal) {
-  const bmr = gender === 'male'
-    ? (10 * weight) + (6.25 * height) - (5 * age) + 5
-    : (10 * weight) + (6.25 * height) - (5 * age) - 161;
-  let tdee = Math.round(bmr * activity);
-  if (goal === 'lose') tdee -= 500;
-  if (goal === 'gain') tdee += 300;
-  return Math.max(tdee, 1200);
-}
-
-function getDailyGoal() { const p = loadProfile(); return (p && p.tdee) ? p.tdee : 2000; }
-function loadLog()       { try { return JSON.parse(localStorage.getItem(TODAY_KEY)) || {kcal:0,protein:0,fat:0,carbs:0}; } catch { return {kcal:0,protein:0,fat:0,carbs:0}; } }
-function saveLog(d)      { localStorage.setItem(TODAY_KEY, JSON.stringify(d)); }
-function loadProfile()   { try { return JSON.parse(localStorage.getItem(PROFILE_KEY)); } catch { return null; } }
-function persistProfile(d){ localStorage.setItem(PROFILE_KEY, JSON.stringify(d)); }
-
-function animateCount(el, target, suffix, duration) {
-  if (!el) return;
-  const start = Date.now(), from = parseInt(el.textContent) || 0;
-  (function tick() {
-    const p = Math.min((Date.now() - start) / duration, 1), e = 1 - Math.pow(1 - p, 3);
-    el.textContent = Math.round(from + (target - from) * e) + suffix;
-    if (p < 1) requestAnimationFrame(tick);
-  })();
-}
-
-function animateRing(id, value, maxVal) {
-  const circ = 188.5, pct = Math.min(value / maxVal, 1), offset = circ - pct * circ;
-  const el = document.getElementById(id);
-  if (el) setTimeout(() => { el.style.strokeDashoffset = offset; }, 60);
-}
-
-function updateDashboard() {
-  const log = loadLog(), goal = getDailyGoal();
-  const pct = Math.min(Math.round((log.kcal / goal) * 100), 100);
-  document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('goalPercent').textContent = pct + '%';
-  document.getElementById('goalLabel').textContent = goal;
-  animateCount(document.getElementById('todayKcal'),  log.kcal, '', 600);
-  animateCount(document.getElementById('remainKcal'), Math.max(0, goal - log.kcal), '', 600);
-  document.getElementById('macroProteinVal').textContent = log.protein + 'g';
-  document.getElementById('macroFatVal').textContent     = log.fat     + 'g';
-  document.getElementById('macroCarbsVal').textContent   = log.carbs   + 'g';
-  animateRing('ringProtein', log.protein, 150);
-  animateRing('ringFat',     log.fat,     70);
-  animateRing('ringCarbs',   log.carbs,   300);
-}
-
-function renderAnalytics() {
-  try {
-    const p = loadProfile(), t = T[activeLang];
-    if (p && p.weight) {
-      document.getElementById('analyticsWeight').textContent = p.weight;
-      const tgt = p.goal === 'lose' ? Math.round(p.weight * 0.92) : p.goal === 'gain' ? Math.round(p.weight * 1.06) : p.weight;
-      document.getElementById('analyticsTargetWeight').textContent = tgt;
-      document.getElementById('analyticsGoalLabel').textContent = p.goal === 'lose' ? t.goalLose : p.goal === 'gain' ? t.goalGain : t.goalMaintain;
-    } else {
-      ['analyticsWeight','analyticsTargetWeight'].forEach(id => document.getElementById(id).textContent = '—');
-      document.getElementById('analyticsGoalLabel').textContent = '—';
-    }
-
-    if (p && p.height && p.weight) {
-      const h = p.height / 100, bmi = (p.weight / (h * h)).toFixed(1), n = parseFloat(bmi);
-      document.getElementById('bmiValue').textContent = bmi;
-      let cat, col;
-      if (n < 18.5)      { cat = t.underweight; col = '#60a5fa'; }
-      else if (n < 25)   { cat = t.healthy;     col = '#34d399'; }
-      else if (n < 30)   { cat = t.overweight;  col = '#fbbf24'; }
-      else               { cat = t.obese;        col = '#f87171'; }
-      const ce = document.getElementById('bmiCategory');
-      ce.textContent = cat; ce.style.background = col + '22'; ce.style.color = col;
-      const pct = Math.min(Math.max(((n - 15) / 25) * 100, 0), 100);
-      document.getElementById('bmiNeedle').style.left = pct + '%';
-    } else {
-      document.getElementById('bmiValue').textContent    = '—';
-      document.getElementById('bmiCategory').textContent = '—';
-      document.getElementById('bmiNeedle').style.left    = '0%';
-    }
-
-    const dayNames = {
-      uz: ['Yak','Dush','Sesh','Chor','Pay','Jum','Shan'],
-      ru: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
-      en: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
-    };
-    const days = [], wData = [], cData = [];
-    const today = new Date(), baseW = p && p.weight ? p.weight : 0;
-
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date(today);
-      d.setDate(today.getDate() - i);
-      days.push(dayNames[activeLang][d.getDay()]);
-      const dateStr = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-      let dayKcal = 0;
-      try { const dayData = JSON.parse(localStorage.getItem('cs_day_' + dateStr)); if (dayData && dayData.kcal) dayKcal = dayData.kcal; } catch(e) {}
-      cData.push(dayKcal);
-      wData.push(baseW);
-    }
-
-    if (chartWeight)  { try { chartWeight.destroy(); }  catch(e) {} chartWeight  = null; }
-    if (chartCalorie) { try { chartCalorie.destroy(); } catch(e) {} chartCalorie = null; }
-
-    const cwCanvas = document.getElementById('chartWeight');
-    const ccCanvas = document.getElementById('chartCalorie');
-    
-    // Tungi rejimga qarab grafik chiziqlari rangini sozlash
-    const isDark = document.documentElement.classList.contains('dark');
-    const gridColor = isDark ? '#374151' : '#f3f4f6';
-    const textColor = '#9ca3af';
-
-    const yAxisOptions = {
-      display: true,
-      ticks:  { font: { family: 'Poppins', size: 10 }, color: textColor, maxTicksLimit: 5 },
-      grid:   { color: gridColor, borderDash: [5, 5] },
-      border: { display: false }
-    };
-    const xAxisOptions = { 
-      grid: { display: false }, 
-      ticks: { font: { family: 'Poppins', size: 10 }, color: textColor } 
-    };
-
-    if (cwCanvas && baseW > 0) {
-      chartWeight = new Chart(cwCanvas, {
-        type: 'line',
-        data: { labels: days, datasets: [{ data: wData, borderColor: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: isDark ? '#1f2937' : '#fff', pointBorderColor: '#10b981' }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Poppins' }, bodyFont: { family: 'Poppins' }, padding: 10, cornerRadius: 8, displayColors: false, callbacks: { label: (ctx) => ctx.parsed.y.toFixed(1) + ' kg' } } }, scales: { x: xAxisOptions, y: yAxisOptions } }
-      });
-    }
-    if (ccCanvas) {
-      chartCalorie = new Chart(ccCanvas, {
-        type: 'bar',
-        data: { labels: days, datasets: [{ data: cData, backgroundColor: cData.map((v, i) => i === 6 ? '#10b981' : (isDark ? '#4b5563' : '#e5e7eb')), borderRadius: 4, barThickness: 12 }] },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1f2937', titleFont: { family: 'Poppins' }, bodyFont: { family: 'Poppins' }, padding: 10, cornerRadius: 8, displayColors: false, callbacks: { label: (ctx) => Math.round(ctx.parsed.y) + ' kcal' } } }, scales: { x: xAxisOptions, y: yAxisOptions } }
-      });
-    }
-  } catch(e) { console.error(e); }
-}
-
-(function init() {
-  applyThemeStyles();
-  applyLang();
-  if (loadProfile()) document.getElementById('profileDot').classList.remove('hidden');
-  updateDashboard();
-})();
-</script>
-</body>
-</html>
+    try { tg.HapticFeedback.impactOccurred('light'); } catch(err
