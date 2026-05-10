@@ -14,7 +14,7 @@
 
   <script>
     tailwind.config = {
-      darkMode: 'class', // Qorong'i rejimni yoqamiz
+      darkMode: 'class', 
       theme: {
         extend: {
           colors: { mint: { 50:'#f0fdf8',100:'#ccfbef',200:'#99f6e0',300:'#5eead4',400:'#2dd4bf',500:'#10b981',600:'#059669',700:'#047857' } },
@@ -30,7 +30,6 @@
     *{font-family:'Poppins',sans-serif;}
     body{transition: background-color 0.3s, color 0.3s;}
     
-    /* Dark Mode Global Overrides */
     .dark body { background: #111827 !important; color: #f9fafb !important; }
     .dark header { background: rgba(17, 24, 39, 0.9) !important; border-bottom-color: #374151 !important; }
     .dark .bottom-nav { background: rgba(17, 24, 39, 0.95) !important; border-top-color: #374151 !important; }
@@ -40,20 +39,16 @@
       box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
     .dark .scan-area { border-color: #374151 !important; }
-    
     .dark .field-input { background: #374151 !important; border-color: #4b5563; color: #f9fafb !important; }
     .dark .field-input:focus { border-color: #10b981; background: #4b5563 !important; }
-    
     .dark .lang-btn { background: #374151; border-color: #4b5563; color: #d1d5db; }
     .dark .lang-btn.active { background: #10b981; border-color: #10b981; color: #fff; }
-    
     .dark .bg-gray-100 { background-color: #374151 !important; }
     .dark .bg-blue-50 { background-color: rgba(59, 130, 246, 0.15) !important; }
     .dark .bg-amber-50 { background-color: rgba(245, 158, 11, 0.15) !important; }
     .dark .bg-violet-50 { background-color: rgba(139, 92, 246, 0.15) !important; }
     .dark .border-mint-50 { border-color: rgba(16, 185, 129, 0.2) !important; }
     
-    /* Animations & Others */
     .spinner{animation:spin .9s linear infinite;}
     @keyframes spin{to{transform:rotate(360deg);}}
     .pulse-ring::after{content:'';position:absolute;inset:-6px;border-radius:9999px;border:2px solid #10b981;animation:pulse-ring 2s ease-out infinite;}
@@ -61,10 +56,10 @@
     @keyframes slideUp{from{opacity:0;transform:translateY(32px);}to{opacity:1;transform:translateY(0);}}
     .slide-up{animation:slideUp .45s cubic-bezier(.22,1,.36,1) both;}
     @keyframes toastIn{from{opacity:0;transform:translate(-50%,16px);}to{opacity:1;transform:translate(-50%,0);}}
+    
     .progress-fill{transition:width .8s cubic-bezier(.22,1,.36,1);}
-    .scan-area{transition:box-shadow .2s,transform .2s;display:flex;-webkit-tap-highlight-color:transparent;}
+    .scan-area{transition:box-shadow .2s,transform .2s;}
     .scan-area:hover{box-shadow:0 0 32px rgba(16,185,129,.18);transform:scale(1.01);}
-    .scan-area:active{transform:scale(.98);}
     .count-num{font-variant-numeric:tabular-nums;}
     .gender-btn{transition:all .2s;border-radius:12px;padding:10px 0;font-size:14px;font-weight:600;color:#6b7280;}
     .dark .gender-btn { color: #9ca3af; }
@@ -74,12 +69,13 @@
     
     #errorToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
     #successToast{animation:toastIn .35s cubic-bezier(.22,1,.36,1) both;}
+    
     .bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:40;backdrop-filter:blur(12px);border-top:1px solid #f0fdf4;padding-bottom:env(safe-area-inset-bottom,0px);}
     .nav-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 0 6px;flex:1;color:#9ca3af;font-size:10px;font-weight:600;transition:color .2s;cursor:pointer;border:none;background:none;}
     .nav-btn.active{color:#10b981;}
     .nav-btn svg{transition:transform .2s;}
     .nav-btn.active svg{transform:scale(1.1);}
-    .nav-fab{width:52px;height:52px;border-radius:9999px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s,box-shadow .15s;margin-top:-10px;position:relative;flex-shrink:0;-webkit-tap-highlight-color:transparent;}
+    .nav-fab{width:52px;height:52px;border-radius:9999px;background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;transition:transform .15s,box-shadow .15s;margin-top:-10px;position:relative;flex-shrink:0;}
     .nav-fab:active{transform:scale(.93);box-shadow:0 2px 8px rgba(16,185,129,.3);}
     .tab-panel{display:none;}
     .tab-panel.active{display:block;animation:slideUp .3s cubic-bezier(.22,1,.36,1) both;}
@@ -87,7 +83,6 @@
     .lang-btn.active{background:#10b981;border-color:#10b981;color:#fff;}
     .settings-section{border-radius:20px;padding:20px;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
     .settings-section-title{font-size:11px;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:.08em;margin-bottom:14px;}
-    
     .ring-wrap{position:relative;display:inline-flex;align-items:center;justify-content:center;}
     .ring-wrap svg{transform:rotate(-90deg);}
     .ring-track{fill:none;stroke-linecap:round;}
@@ -98,8 +93,6 @@
     .bmi-needle{position:absolute;top:-4px;width:4px;height:18px;background:#1f2937;border-radius:2px;transform:translateX(-50%);transition:left 1s cubic-bezier(.22,1,.36,1);}
     .dark .bmi-needle { background: #f9fafb; }
     .stat-card{border-radius:20px;padding:16px 18px;box-shadow:0 4px 20px rgba(0,0,0,0.05);}
-
-
   </style>
 </head>
 <body class="min-h-screen bg-[#F9FAFB] text-gray-800" style="padding-bottom:80px">
@@ -173,34 +166,39 @@
     </div>
   </div>
 
-  <div class="relative flex justify-center">
-    <!-- Ikkala yashirin input — iOS uchun alohida ajratilgan -->
-    <input type="file" id="fileInputCamera"  accept="image/*"            capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
-    <input type="file" id="fileInputGallery" accept="image/jpeg,image/png"                    style="visibility:hidden;width:0;height:0;position:absolute;" />
-
-    <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-10 bg-white">
+  <div class="relative flex justify-center w-full">
+    <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-8 bg-white dark:border-gray-600 dark:bg-gray-800">
+      
       <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center shadow-glow">
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
         </svg>
       </div>
+      
       <div class="text-center">
         <p id="txtScanTitle" class="text-base font-700 text-gray-800 dark:text-white">Taomni yuklang</p>
         <p id="txtScanSub" class="text-xs text-gray-400 mt-0.5">Kamera yoki Galereyadan tanlang</p>
       </div>
-      <!-- Ikki alohida tugma -->
-      <div class="flex gap-3 w-full px-4">
-        <label for="fileInputCamera" class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3 font-600 text-sm cursor-pointer shadow-card active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-          <span id="txtCameraBtn">Kamera</span>
-        </label>
-        <label for="fileInputGallery" class="flex-1 flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 rounded-2xl py-3 font-600 text-sm cursor-pointer active:scale-95 transition-all select-none" style="-webkit-tap-highlight-color:transparent;">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span id="txtGalleryBtn">Galereya</span>
-        </label>
+
+      <div class="flex gap-3 w-full px-4 mt-2">
+        <div class="relative flex-1 bg-gradient-to-r from-mint-500 to-mint-600 text-white rounded-2xl py-3 flex items-center justify-center shadow-card hover:opacity-90 active:scale-95 transition-all">
+          <input type="file" accept="image/*" capture="environment" onchange="handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer;" />
+          <div class="flex items-center justify-center gap-2 pointer-events-none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span id="txtCameraBtn" class="font-600 text-sm">Kamera</span>
+          </div>
+        </div>
+        <div class="relative flex-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-200 rounded-2xl py-3 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 active:scale-95 transition-all">
+          <input type="file" accept="image/jpeg, image/png" onchange="handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer;" />
+          <div class="flex items-center justify-center gap-2 pointer-events-none">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span id="txtGalleryBtn" class="font-600 text-sm">Galereya</span>
+          </div>
+        </div>
       </div>
     </div>
-    <div id="loadingState" class="hidden w-full rounded-3xl shadow-soft border-2 border-mint-100 flex flex-col items-center justify-center gap-3 py-12 bg-white">
+    
+    <div id="loadingState" class="hidden absolute inset-0 z-50 w-full rounded-3xl shadow-soft border-2 border-mint-100 flex flex-col items-center justify-center gap-3 bg-white dark:bg-gray-800 dark:border-gray-600">
       <div class="relative w-16 h-16">
         <svg class="spinner w-16 h-16 text-mint-500" viewBox="0 0 50 50" fill="none">
           <circle cx="25" cy="25" r="20" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="60"/>
@@ -208,7 +206,6 @@
         <div class="absolute inset-0 flex items-center justify-center"><div class="w-5 h-5 rounded-full bg-gradient-to-br from-mint-400 to-mint-600"></div></div>
       </div>
       <p id="txtAnalyzing" class="text-sm font-600 text-gray-600 dark:text-gray-300">Taom tahlil qilinmoqda…</p>
-      <p id="txtWait" class="text-xs text-gray-400">Bir lahza kuting</p>
     </div>
   </div>
 
@@ -363,10 +360,14 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span id="navTxtHome">Bosh</span>
     </button>
-    <label class="nav-fab" for="fileInputNavCam" onclick="if(activeTab!=='home')switchTab('home')" aria-label="Kamerani ochish">
-      <input type="file" id="fileInputNavCam" accept="image/*" capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-    </label>
+    
+    <div class="relative flex items-center justify-center" style="width: 52px; height: 52px; margin-top: -10px; flex-shrink: 0;">
+      <input type="file" accept="image/*" capture="environment" onchange="if(activeTab!=='home')switchTab('home'); handleFileChange(event)" style="position:absolute; inset:0; width:100%; height:100%; opacity:0; z-index:999; cursor:pointer; border-radius:50%;" />
+      <div class="nav-fab w-full h-full m-0 pointer-events-none">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
+    </div>
+
     <button class="nav-btn" id="nav-analytics" onclick="switchTab('analytics')">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
       <span id="navTxtAnalytics">Tahlil</span>
@@ -398,7 +399,7 @@
 
 <script>
 // ============================================================
-// TARJIMA JADVALI (Tungi rejim so'zlari qo'shildi)
+// TARJIMA JADVALI
 // ============================================================
 const T = {
   uz:{
@@ -496,9 +497,6 @@ try {
   if (u && u.lang && T[u.lang]) activeLang = u.lang;
 } catch(e) {}
 
-// ============================================================
-// THEME (MAVZU) BOSHQARUVI
-// ============================================================
 let currentTheme = localStorage.getItem('cs_theme') || 'auto';
 
 function setThemeMode(mode) {
@@ -519,7 +517,6 @@ function applyThemeStyles() {
   } else if (currentTheme === 'light') {
     isDark = false;
   } else {
-    // Avto rejim - Telegram sozlamasini o'qish
     if (tg && tg.colorScheme) {
       isDark = tg.colorScheme === 'dark';
     } else {
@@ -527,20 +524,17 @@ function applyThemeStyles() {
     }
   }
 
-  // Tailwind 'dark' klasini html tegiga qo'shish yoki olib tashlash
   if (isDark) {
     document.documentElement.classList.add('dark');
   } else {
     document.documentElement.classList.remove('dark');
   }
 
-  // Telegram Header va Background ranglarini moslash
   if (tg) {
     try { tg.setHeaderColor(isDark ? '#111827' : '#ffffff'); } catch(e) {}
     try { tg.setBackgroundColor(isDark ? '#111827' : '#F9FAFB'); } catch(e) {}
   }
 
-  // Agar Tahlil (Analytics) oynasida bo'lsak, grafiklarni yangilaymiz
   if (activeTab === 'analytics') {
     renderAnalytics();
   }
@@ -550,19 +544,14 @@ const tg = window.Telegram?.WebApp;
 if (tg) {
   tg.ready();
   tg.expand();
-  // Telegram mavzusi o'zgarganda avtomat eshitish
   tg.onEvent('themeChanged', () => {
     if (currentTheme === 'auto') applyThemeStyles();
   });
 }
 
-
 async function handleFileChange(e) {
-  e.stopPropagation();
-
-  // Faylni darhol (sync) ushlash — async kutishdan oldin
   const file = e.target.files && e.target.files[0];
-  e.target.value = ''; // Xuddi shu yerda reset: qayta tanlash imkonini beradi
+  e.target.value = ''; // Darhol tozalash
 
   if (!file) return;
 
@@ -739,7 +728,7 @@ async function saveProfile() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
-    }).catch(e => console.log('DB bilan ulanishda xato'));
+    }).catch(e => console.log('DB error'));
   } catch(e) { console.error(e); }
 
   document.getElementById('profileDot').classList.remove('hidden');
@@ -787,7 +776,6 @@ function applyLang() {
   s('txtResCarbs', t.carbs); s('addLogBtn', t.addLog); s('rescanBtn', t.rescan);
   s('txtProfileTitle', t.profileTitle); s('txtTDEESub', t.tdeeSub);
   
-  // Theme strings
   s('txtThemeTitle', t.themeTitle);
   document.getElementById('themeLight').innerHTML = t.themeLight;
   document.getElementById('themeDark').innerHTML = t.themeDark;
@@ -920,7 +908,6 @@ function renderAnalytics() {
     const cwCanvas = document.getElementById('chartWeight');
     const ccCanvas = document.getElementById('chartCalorie');
     
-    // Tungi rejimga qarab grafik chiziqlari rangini sozlash
     const isDark = document.documentElement.classList.contains('dark');
     const gridColor = isDark ? '#374151' : '#f3f4f6';
     const textColor = '#9ca3af';
@@ -952,18 +939,6 @@ function renderAnalytics() {
     }
   } catch(e) { console.error(e); }
 }
-
-// ============================================================
-// FAYL INPUT EVENT LISTENERLAR
-// ============================================================
-(function attachFileInputs() {
-  const cameraInput  = document.getElementById('fileInputCamera');
-  const galleryInput = document.getElementById('fileInputGallery');
-  const navCamInput  = document.getElementById('fileInputNavCam');
-  if (cameraInput)  cameraInput.addEventListener('change',  handleFileChange);
-  if (galleryInput) galleryInput.addEventListener('change', handleFileChange);
-  if (navCamInput)  navCamInput.addEventListener('change',  handleFileChange);
-})();
 
 (function init() {
   applyThemeStyles();
