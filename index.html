@@ -174,9 +174,9 @@
   </div>
 
   <div class="relative flex justify-center">
-    <!-- Ikkala yashirin input — iOS uchun alohida ajratilgan -->
-    <input type="file" id="fileInputCamera"  accept="image/*"            capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
-    <input type="file" id="fileInputGallery" accept="image/jpeg,image/png"                    style="visibility:hidden;width:0;height:0;position:absolute;" />
+    <!-- Ikkala yashirin input — iOS uchun to'g'ri texnika -->
+    <input type="file" id="fileInputCamera"  accept="image/*"             capture="environment" onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
+    <input type="file" id="fileInputGallery" accept="image/jpeg,image/png"                     onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
 
     <div id="scanBtn" class="scan-area pulse-ring w-full rounded-3xl shadow-soft border-2 border-dashed border-mint-200 flex flex-col items-center justify-center gap-4 py-10 bg-white">
       <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-mint-400 to-mint-600 flex items-center justify-center shadow-glow">
@@ -364,7 +364,7 @@
       <span id="navTxtHome">Bosh</span>
     </button>
     <label class="nav-fab" for="fileInputNavCam" onclick="if(activeTab!=='home')switchTab('home')" aria-label="Kamerani ochish">
-      <input type="file" id="fileInputNavCam" accept="image/*" capture="environment" style="visibility:hidden;width:0;height:0;position:absolute;" />
+      <input type="file" id="fileInputNavCam" accept="image/*" capture="environment" onchange="handleFileChange(event)" style="width:0.1px;height:0.1px;opacity:0;position:absolute;z-index:-1;" />
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
     </label>
     <button class="nav-btn" id="nav-analytics" onclick="switchTab('analytics')">
@@ -558,11 +558,9 @@ if (tg) {
 
 
 async function handleFileChange(e) {
-  e.stopPropagation();
-
   // Faylni darhol (sync) ushlash — async kutishdan oldin
   const file = e.target.files && e.target.files[0];
-  e.target.value = ''; // Xuddi shu yerda reset: qayta tanlash imkonini beradi
+  e.target.value = ''; // Darhol reset: qayta tanlash imkonini beradi
 
   if (!file) return;
 
@@ -952,18 +950,6 @@ function renderAnalytics() {
     }
   } catch(e) { console.error(e); }
 }
-
-// ============================================================
-// FAYL INPUT EVENT LISTENERLAR
-// ============================================================
-(function attachFileInputs() {
-  const cameraInput  = document.getElementById('fileInputCamera');
-  const galleryInput = document.getElementById('fileInputGallery');
-  const navCamInput  = document.getElementById('fileInputNavCam');
-  if (cameraInput)  cameraInput.addEventListener('change',  handleFileChange);
-  if (galleryInput) galleryInput.addEventListener('change', handleFileChange);
-  if (navCamInput)  navCamInput.addEventListener('change',  handleFileChange);
-})();
 
 (function init() {
   applyThemeStyles();
