@@ -1,0 +1,15 @@
+# Python dependencies
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+sqlalchemy[asyncio]>=2.0.30
+asyncpg>=0.29.0
+alembic>=1.13.0
+pydantic>=2.7.0
+pyjwt>=2.8.0
+google-generativeai>=0.7.0
+python-multipart>=0.0.9   # required for UploadFile
+httpx>=0.27.0             # async HTTP + testing
+Pillow>=10.3.0            # image preprocessing in gemini_service
+# Bot worker
+aiogram>=3.7.0
+aiohttp>=3.9.0            # aiogram webhook server
