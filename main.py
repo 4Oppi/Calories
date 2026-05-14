@@ -8,9 +8,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.database import engine, Base
-from backend.routers import auth, meals, scan, profile, gamification
-from backend.routers import telegram_bot
+from database import engine, Base
+from routers import auth, meals, scan, profile, gamification
+from routers import telegram_bot
 
 
 # ---------------------------------------------------------------------------
